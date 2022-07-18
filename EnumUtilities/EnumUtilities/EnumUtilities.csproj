@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup Label="Identity">
 		<Product>Rem.Core.Utilities.Enums</Product>
@@ -14,7 +14,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Label="Outputs">
-		<TargetFrameworks>net461;netstandard2.0;netcoreapp3.0;netcoreapp3.1;net5.0</TargetFrameworks>
+		<TargetFrameworks>net461;netstandard2.0;netcoreapp3.1;net5.0</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup Label="Language">
@@ -23,7 +23,13 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+		<PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+	</ItemGroup>
+
 	<ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+		<PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
 		<Using Remove="System.Net.Http"/><!-- This implicit using is for a package this library does not reference. -->
 	</ItemGroup>
+
 </Project>
