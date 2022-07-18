@@ -13,14 +13,18 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
 {
     private static readonly EnumOperations<TEnum> operations;
 
+    internal static readonly EnumUnderlyingType underlyingType;
+
     private static readonly TEnum[] values = (TEnum[])Enum.GetValues(typeof(TEnum));
 
     private static readonly HashSet<TEnum> valuesSet = new(values);
 
     static EnumRep()
     {
-#pragma warning disable CS8524 // All enum values in the map should be named
-        operations = EnumUnderlyingTypes.FromType(typeof(TEnum).GetEnumUnderlyingType()) switch
+        underlyingType = EnumUnderlyingTypes.FromType(typeof(TEnum).GetEnumUnderlyingType());
+
+#pragma warning disable CS8524 // The underlying types returned are always named
+        operations = underlyingType switch
 #pragma warning restore CS8524
         {
             EnumUnderlyingType.Byte => new ByteEnumOperations<TEnum>(),

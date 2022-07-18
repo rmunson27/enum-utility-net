@@ -138,4 +138,12 @@ public static class Enums
     /// <typeparam name="TEnum"></typeparam>
     /// <returns></returns>
     public static TEnum[] GetValues<TEnum>() where TEnum : struct, Enum => EnumRep<TEnum>.GetValues();
+
+    /// <summary>
+    /// Gets a value describing the underlying type of the <see langword="enum"/> type <typeparamref name="TEnum"/>.
+    /// </summary>
+    /// <typeparam name="TEnum"></typeparam>
+    /// <returns></returns>
+    public static EnumUnderlyingType UnderlyingType<TEnum>() where TEnum : struct, Enum
+        => EnumRep<TEnum>.underlyingType;
 }
