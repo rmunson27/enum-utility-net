@@ -125,9 +125,10 @@ public static class Enums
         => EnumRep<TEnum>.CompareTo(lhs, rhs);
 
     /// <summary>
-    /// Determines if the enum value passed in is a named, defined value of type <typeparamref name="TEnum"/>.
+    /// Determines if the supplied <typeparamref name="TEnum"/> value is a named, defined value of its type, or a
+    /// bit set of named, defined values of its type if <typeparamref name="TEnum"/> is decorated with an instance of
+    /// <see cref="FlagsAttribute"/>.
     /// </summary>
-    /// <typeparam name="TEnum"></typeparam>
     /// <param name="value"></param>
     /// <returns></returns>
     public static bool IsDefined<TEnum>(TEnum value) where TEnum : struct, Enum => EnumRep<TEnum>.IsDefined(value);
@@ -146,4 +147,45 @@ public static class Enums
     /// <returns></returns>
     public static EnumUnderlyingType UnderlyingType<TEnum>() where TEnum : struct, Enum
         => EnumRep<TEnum>.underlyingType;
+
+    /// <summary>
+    /// Determines whether the type definition of <typeparamref name="TEnum"/> is decorated with an instance of
+    /// <see cref="FlagsAttribute"/>.
+    /// </summary>
+    /// <returns></returns>
+    public static bool HasFlagsAttribute<TEnum>() where TEnum : struct, Enum => EnumRep<TEnum>.HasFlagsAttribute;
+
+    /// <summary>
+    /// Determines whether the specified <typeparamref name="TEnum"/> value is an atomic value (consisting of only
+    /// 1 bit flag).
+    /// </summary>
+    /// <remarks>
+    /// If <typeparamref name="TEnum"/> is not decorated with an instance of <see cref="FlagsAttribute"/>, this method
+    /// will return whether or not <paramref name="value"/> is defined (as in that case all values are treated
+    /// as atomic).
+    /// </remarks>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static bool IsAtomic<TEnum>(TEnum value) where TEnum : struct, Enum => EnumRep<TEnum>.IsAtomic(value);
+
+    /// <summary>
+    /// Gets an array of all atomic values (consisting of only 1 bit flag) of type <typeparamref name="TEnum"/>.
+    /// </summary>
+    /// <remarks>
+    /// If <typeparamref name="TEnum"/> is not decorated with an instance of <see cref="FlagsAttribute"/>, this method
+    /// will return all values of the type (as in that case all values are treated as atomic).
+    /// </remarks>
+    /// <returns></returns>
+    public static TEnum[] GetAtomicValues<TEnum>() where TEnum : struct, Enum => EnumRep<TEnum>.GetAtomicValues();
+
+    /// <summary>
+    /// Gets a collection of the flags contained in an instance of <typeparamref name="TEnum"/>.
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException">
+    /// <typeparamref name="TEnum"/> is not decorated with an instance of <see cref="FlagsAttribute"/>, and therefore
+    /// cannot reliably be treated as a bit set of atomic values of its type.
+    /// </exception>
+    public static IEnumerable<TEnum> GetFlags<TEnum>(TEnum value) where TEnum : struct, Enum
+        => EnumRep<TEnum>.GetFlags(value);
 }

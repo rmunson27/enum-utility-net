@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rem.Core.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -74,7 +75,7 @@ public static class EnumUnderlyingTypes
     /// <exception cref="InvalidOperationException">
     /// The type is not one of the underlying types representing an <see langword="enum"/>.
     /// </exception>
-    public static EnumUnderlyingType FromType(Type type)
+    [return: NamedEnum] public static EnumUnderlyingType FromType(Type type)
     {
         if (type is null) throw new ArgumentNullException(nameof(type));
 
