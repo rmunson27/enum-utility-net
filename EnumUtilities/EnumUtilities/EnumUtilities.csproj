@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup Label="Identity">
+		<Product>Rem.Core.Utilities.Enums</Product>
+		<PackageId>Rem.Core.Utilities.Enums</PackageId>
+		<RootNamespace>Rem.Core.Utilities</RootNamespace>
+		<Description>
+			Provides the Rem.Core.Utilities.Enums class, which offers functionality extending the functionality of
+			the System.Enum class for .NET standard 2.0+.
+		</Description>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Authors>Richard E. Munson</Authors>
+		<Copyright>Richard E. Munson, 2022</Copyright>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Outputs">
+		<TargetFramework>netstandard2.0</TargetFramework>
+	</PropertyGroup>
+
+</Project>
