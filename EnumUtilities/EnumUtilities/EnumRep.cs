@@ -20,7 +20,7 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     static EnumRep()
     {
 #pragma warning disable CS8524 // All enum values in the map should be named
-        operations = EnumUnderlyingTypes.Map(typeof(TEnum).GetEnumUnderlyingType()) switch
+        operations = EnumUnderlyingTypes.FromType(typeof(TEnum).GetEnumUnderlyingType()) switch
 #pragma warning restore CS8524
         {
             EnumUnderlyingType.Byte => new ByteEnumOperations<TEnum>(),
