@@ -11,7 +11,8 @@ namespace Rem.Core.Utilities;
 /// </summary>
 /// <remarks>
 /// This class offers methods for efficiently comparing and operating on generic <see langword="enum"/> values where
-/// the type is not known.
+/// the underlying type is not known, as well as adding some more useful set operations on <see langword="enum"/> types
+/// that are not available in .NET.
 /// </remarks>
 public static class Enums
 {
