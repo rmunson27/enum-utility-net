@@ -30,6 +30,8 @@ internal static class BitSet_Defaults
 
         BitSet_Default.One | BitSet_Default.Two | BitSet_Default.Four,
     });
+
+    public const BitSet_Default Unnamed = (BitSet_Default)8;
 }
 
 [Flags]
@@ -49,6 +51,13 @@ internal enum BitSet_Default : byte
     One = 1,
     Two = 2,
     Four = 4,
+}
+
+internal static class NonBitSets
+{
+    public static readonly ImmutableArray<NonBitSet> AllValues = Enum.GetValues<NonBitSet>().ToImmutableArray();
+
+    public const NonBitSet Unnamed = (NonBitSet)4;
 }
 
 internal enum NonBitSet : short
