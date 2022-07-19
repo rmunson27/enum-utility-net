@@ -34,6 +34,52 @@ public static class Enums
         => EnumRep<TEnum>.HasFlag(value, flag);
 
     /// <summary>
+    /// Determines if the <typeparamref name="TEnum"/> value passed in has any of the specified flags.
+    /// </summary>
+    /// <typeparam name="TEnum"></typeparam>
+    /// <param name="value"></param>
+    /// <param name="flags"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"><paramref name="flags"/> was <see langword="null"/>.</exception>
+    public static bool HasAnyFlag<TEnum>(TEnum value, params TEnum[] flags) where TEnum : struct, Enum
+        => EnumRep<TEnum>.HasAnyFlag(value, flags is null ? throw new ArgumentNullException(nameof(flags)) : flags);
+
+    /// <summary>
+    /// Determines if the <typeparamref name="TEnum"/> value passed in has any of the specified flags.
+    /// </summary>
+    /// <typeparam name="TEnum"></typeparam>
+    /// <param name="value"></param>
+    /// <param name="flags"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"><paramref name="flags"/> was <see langword="null"/>.</exception>
+    public static bool HasAnyFlag<TEnum>(TEnum value, IEnumerable<TEnum> flags) where TEnum : struct, Enum
+        => EnumRep<TEnum>.HasAnyFlag(value, flags is null ? throw new ArgumentNullException(nameof(flags)) : flags);
+
+    /// <summary>
+    /// Returns a subset of the specified flags that are set in <paramref name="value"/>.
+    /// </summary>
+    /// <typeparam name="TEnum"></typeparam>
+    /// <param name="value"></param>
+    /// <param name="flags"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"><paramref name="flags"/> was <see langword="null"/>.</exception>
+    public static IEnumerable<TEnum> PresentFlags<TEnum>(TEnum value, params TEnum[] flags)
+        where TEnum : struct, Enum
+        => EnumRep<TEnum>.PresentFlags(value, flags is null ? throw new ArgumentNullException(nameof(flags)) : flags);
+
+    /// <summary>
+    /// Returns a subset of the specified flags that are set in <paramref name="value"/>.
+    /// </summary>
+    /// <typeparam name="TEnum"></typeparam>
+    /// <param name="value"></param>
+    /// <param name="flags"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"><paramref name="flags"/> was <see langword="null"/>.</exception>
+    public static IEnumerable<TEnum> PresentFlags<TEnum>(TEnum value, IEnumerable<TEnum> flags)
+        where TEnum : struct, Enum
+        => EnumRep<TEnum>.PresentFlags(value, flags is null ? throw new ArgumentNullException(nameof(flags)) : flags);
+
+    /// <summary>
     /// Computes the bitwise OR (|) of the values passed in.
     /// </summary>
     /// <typeparam name="TEnum"></typeparam>

@@ -70,6 +70,11 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
 
     public static bool HasFlag(TEnum value, TEnum flag) => operations.HasFlag(value, flag);
 
+    public static bool HasAnyFlag(TEnum value, IEnumerable<TEnum> flags) => operations.HasAnyFlag(value, flags);
+
+    public static IEnumerable<TEnum> PresentFlags(TEnum value, IEnumerable<TEnum> flags)
+        => operations.PresentFlags(value, flags);
+
     public static TEnum Or(TEnum lhs, TEnum rhs) => operations.Or(lhs, rhs);
 
     public static TEnum Or(IEnumerable<TEnum> values) => operations.Or(values);
@@ -143,7 +148,7 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
         {
             foreach (var flag in atomicValues)
             {
-                if (value.HasFlag(flag)) yield return flag;
+                if (operations.HasFlag(value, flag)) yield return flag;
             }
         }
         else throw new InvalidOperationException(

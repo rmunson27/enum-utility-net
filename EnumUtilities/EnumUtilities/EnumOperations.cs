@@ -42,6 +42,24 @@ internal abstract class EnumOperations<TEnum> where TEnum : struct, Enum
     public abstract bool HasFlag(TEnum value, TEnum flag);
 
     /// <summary>
+    /// Checks if the supplied <typeparamref name="TEnum"/> value has any of the supplied flags, using the underlying
+    /// type to perform the operation.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="flags"></param>
+    /// <returns></returns>
+    public abstract bool HasAnyFlag(TEnum value, IEnumerable<TEnum> flags);
+
+    /// <summary>
+    /// Filters the supplied collection of <typeparamref name="TEnum"/> flags through <paramref name="value"/>,
+    /// returning a collection of the flags that were present.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="flags"></param>
+    /// <returns></returns>
+    public abstract IEnumerable<TEnum> PresentFlags(TEnum value, IEnumerable<TEnum> flags);
+
+    /// <summary>
     /// Performs the bitwise OR of the operands, using the underlying type to perform the operation.
     /// </summary>
     /// <param name="lhs"></param>
@@ -130,6 +148,27 @@ internal sealed class ByteEnumOperations<TEnum> : EnumOperations<TEnum> where TE
 {
     public override TEnum And(TEnum lhs, TEnum rhs) => Enum(Byte(lhs) & Byte(rhs));
 
+    public override IEnumerable<TEnum> PresentFlags(TEnum value, IEnumerable<TEnum> flags)
+    {
+        var valueUnderlying = Byte(value);
+        foreach (var flag in flags)
+        {
+            var flagUnderlying = Byte(flag);
+            if ((valueUnderlying & flagUnderlying) == flagUnderlying) yield return flag;
+        }
+    }
+
+    public override bool HasAnyFlag(TEnum value, IEnumerable<TEnum> flags)
+    {
+        var valueUnderlying = Byte(value);
+        foreach (var flag in flags)
+        {
+            var flagUnderlying = Byte(flag);
+            if ((valueUnderlying & flagUnderlying) == flagUnderlying) return true;
+        }
+        return false;
+    }
+
     public override bool HasFlag(TEnum value, TEnum flag)
     {
         var byteFlag = Byte(flag);
@@ -171,6 +210,27 @@ internal sealed class ByteEnumOperations<TEnum> : EnumOperations<TEnum> where TE
 internal sealed class SByteEnumOperations<TEnum> : EnumOperations<TEnum> where TEnum : struct, Enum
 {
     public override TEnum And(TEnum lhs, TEnum rhs) => Enum(SByte(lhs) & SByte(rhs));
+
+    public override IEnumerable<TEnum> PresentFlags(TEnum value, IEnumerable<TEnum> flags)
+    {
+        var valueUnderlying = SByte(value);
+        foreach (var flag in flags)
+        {
+            var flagUnderlying = SByte(flag);
+            if ((valueUnderlying & flagUnderlying) == flagUnderlying) yield return flag;
+        }
+    }
+
+    public override bool HasAnyFlag(TEnum value, IEnumerable<TEnum> flags)
+    {
+        var valueUnderlying = SByte(value);
+        foreach (var flag in flags)
+        {
+            var flagUnderlying = SByte(flag);
+            if ((valueUnderlying & flagUnderlying) == flagUnderlying) return true;
+        }
+        return false;
+    }
 
     public override bool HasFlag(TEnum value, TEnum flag)
     {
@@ -214,6 +274,27 @@ internal sealed class ShortEnumOperations<TEnum> : EnumOperations<TEnum> where T
 {
     public override TEnum And(TEnum lhs, TEnum rhs) => Enum(Short(lhs) & Short(rhs));
 
+    public override IEnumerable<TEnum> PresentFlags(TEnum value, IEnumerable<TEnum> flags)
+    {
+        var valueUnderlying = Short(value);
+        foreach (var flag in flags)
+        {
+            var flagUnderlying = Short(flag);
+            if ((valueUnderlying & flagUnderlying) == flagUnderlying) yield return flag;
+        }
+    }
+
+    public override bool HasAnyFlag(TEnum value, IEnumerable<TEnum> flags)
+    {
+        var valueUnderlying = Short(value);
+        foreach (var flag in flags)
+        {
+            var flagUnderlying = Short(flag);
+            if ((valueUnderlying & flagUnderlying) == flagUnderlying) return true;
+        }
+        return false;
+    }
+
     public override bool HasFlag(TEnum value, TEnum flag)
     {
         var shortFlag = Short(flag);
@@ -255,6 +336,27 @@ internal sealed class ShortEnumOperations<TEnum> : EnumOperations<TEnum> where T
 internal sealed class UShortEnumOperations<TEnum> : EnumOperations<TEnum> where TEnum : struct, Enum
 {
     public override TEnum And(TEnum lhs, TEnum rhs) => Enum(UShort(lhs) & UShort(rhs));
+
+    public override IEnumerable<TEnum> PresentFlags(TEnum value, IEnumerable<TEnum> flags)
+    {
+        var valueUnderlying = UShort(value);
+        foreach (var flag in flags)
+        {
+            var flagUnderlying = UShort(flag);
+            if ((valueUnderlying & flagUnderlying) == flagUnderlying) yield return flag;
+        }
+    }
+
+    public override bool HasAnyFlag(TEnum value, IEnumerable<TEnum> flags)
+    {
+        var valueUnderlying = UShort(value);
+        foreach (var flag in flags)
+        {
+            var flagUnderlying = UShort(flag);
+            if ((valueUnderlying & flagUnderlying) == flagUnderlying) return true;
+        }
+        return false;
+    }
 
     public override bool HasFlag(TEnum value, TEnum flag)
     {
@@ -298,6 +400,27 @@ internal sealed class IntEnumOperations<TEnum> : EnumOperations<TEnum> where TEn
 {
     public override TEnum And(TEnum lhs, TEnum rhs) => Enum(Int(lhs) & Int(rhs));
 
+    public override IEnumerable<TEnum> PresentFlags(TEnum value, IEnumerable<TEnum> flags)
+    {
+        var valueUnderlying = Int(value);
+        foreach (var flag in flags)
+        {
+            var flagUnderlying = Int(flag);
+            if ((valueUnderlying & flagUnderlying) == flagUnderlying) yield return flag;
+        }
+    }
+
+    public override bool HasAnyFlag(TEnum value, IEnumerable<TEnum> flags)
+    {
+        var valueUnderlying = Int(value);
+        foreach (var flag in flags)
+        {
+            var flagUnderlying = Int(flag);
+            if ((valueUnderlying & flagUnderlying) == flagUnderlying) return true;
+        }
+        return false;
+    }
+
     public override bool HasFlag(TEnum value, TEnum flag)
     {
         var intFlag = Int(flag);
@@ -339,6 +462,27 @@ internal sealed class IntEnumOperations<TEnum> : EnumOperations<TEnum> where TEn
 internal sealed class UIntEnumOperations<TEnum> : EnumOperations<TEnum> where TEnum : struct, Enum
 {
     public override TEnum And(TEnum lhs, TEnum rhs) => Enum(UInt(lhs) & UInt(rhs));
+
+    public override IEnumerable<TEnum> PresentFlags(TEnum value, IEnumerable<TEnum> flags)
+    {
+        var valueUnderlying = UInt(value);
+        foreach (var flag in flags)
+        {
+            var flagUnderlying = UInt(flag);
+            if ((valueUnderlying & flagUnderlying) == flagUnderlying) yield return flag;
+        }
+    }
+
+    public override bool HasAnyFlag(TEnum value, IEnumerable<TEnum> flags)
+    {
+        var valueUnderlying = UInt(value);
+        foreach (var flag in flags)
+        {
+            var flagUnderlying = UInt(flag);
+            if ((valueUnderlying & flagUnderlying) == flagUnderlying) return true;
+        }
+        return false;
+    }
 
     public override bool HasFlag(TEnum value, TEnum flag)
     {
@@ -382,6 +526,27 @@ internal sealed class LongEnumOperations<TEnum> : EnumOperations<TEnum> where TE
 {
     public override TEnum And(TEnum lhs, TEnum rhs) => Enum(Long(lhs) & Long(rhs));
 
+    public override IEnumerable<TEnum> PresentFlags(TEnum value, IEnumerable<TEnum> flags)
+    {
+        var valueUnderlying = Long(value);
+        foreach (var flag in flags)
+        {
+            var flagUnderlying = Long(flag);
+            if ((valueUnderlying & flagUnderlying) == flagUnderlying) yield return flag;
+        }
+    }
+
+    public override bool HasAnyFlag(TEnum value, IEnumerable<TEnum> flags)
+    {
+        var valueUnderlying = Long(value);
+        foreach (var flag in flags)
+        {
+            var flagUnderlying = Long(flag);
+            if ((valueUnderlying & flagUnderlying) == flagUnderlying) return true;
+        }
+        return false;
+    }
+
     public override bool HasFlag(TEnum value, TEnum flag)
     {
         var longFlag = Long(flag);
@@ -423,6 +588,27 @@ internal sealed class LongEnumOperations<TEnum> : EnumOperations<TEnum> where TE
 internal sealed class ULongEnumOperations<TEnum> : EnumOperations<TEnum> where TEnum : struct, Enum
 {
     public override TEnum And(TEnum lhs, TEnum rhs) => Enum(ULong(lhs) & ULong(rhs));
+
+    public override IEnumerable<TEnum> PresentFlags(TEnum value, IEnumerable<TEnum> flags)
+    {
+        var valueUnderlying = ULong(value);
+        foreach (var flag in flags)
+        {
+            var flagUnderlying = ULong(flag);
+            if ((valueUnderlying & flagUnderlying) == flagUnderlying) yield return flag;
+        }
+    }
+
+    public override bool HasAnyFlag(TEnum value, IEnumerable<TEnum> flags)
+    {
+        var valueUnderlying = ULong(value);
+        foreach (var flag in flags)
+        {
+            var flagUnderlying = ULong(flag);
+            if ((valueUnderlying & flagUnderlying) == flagUnderlying) return true;
+        }
+        return false;
+    }
 
     public override bool HasFlag(TEnum value, TEnum flag)
     {
