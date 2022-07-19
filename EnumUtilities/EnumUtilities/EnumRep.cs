@@ -188,7 +188,10 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     private static bool IsDefinedNoFlags(TEnum value) => valuesSet.Contains(value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static bool IsDefinedFlags(TEnum value) => Equals(value, Or(GetFlags(value)));
+    private static bool IsDefinedFlags(TEnum value)
+        => valuesSet.Contains(value)
+            || (!Equal(value, default) // Don't allow the default to be compared for flags or it will always be defined
+                    && Equal(value, Or(GetFlags(value))));
     #endregion
     #endregion
 }
