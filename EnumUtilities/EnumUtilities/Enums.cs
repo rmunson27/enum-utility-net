@@ -138,6 +138,13 @@ public static class Enums
     /// </returns>
     public static int CompareTo<TEnum>(TEnum lhs, TEnum rhs) where TEnum : struct, Enum
         => EnumRep<TEnum>.CompareTo(lhs, rhs);
+
+    /// <summary>
+    /// Gets an object that can be used to efficiently compare <typeparamref name="TEnum"/> values.
+    /// </summary>
+    /// <typeparam name="TEnum"></typeparam>
+    /// <returns></returns>
+    public static IComparer<TEnum> GetComparer<TEnum>() where TEnum : struct, Enum => new EnumRep<TEnum>.Comparer();
     #endregion
 
     #region Enum Details

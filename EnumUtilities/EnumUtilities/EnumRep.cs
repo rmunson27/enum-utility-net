@@ -220,5 +220,12 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     }
     #endregion
     #endregion
+
+    #region Classes
+    public sealed class Comparer : IComparer<TEnum>
+    {
+        public int Compare(TEnum x, TEnum y) => CompareTo(x, y);
+    }
+    #endregion
 }
 
