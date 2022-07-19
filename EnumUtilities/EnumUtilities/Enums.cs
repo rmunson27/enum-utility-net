@@ -13,6 +13,7 @@ namespace Rem.Core.Utilities;
 /// </remarks>
 public static class Enums
 {
+    #region Bitwise Operations
     /// <summary>
     /// Computes the bitwise AND (&) of the values passed in.
     /// </summary>
@@ -22,62 +23,6 @@ public static class Enums
     /// <returns></returns>
     public static TEnum And<TEnum>(TEnum lhs, TEnum rhs) where TEnum : struct, Enum
         => EnumRep<TEnum>.And(lhs, rhs);
-
-    /// <summary>
-    /// Determines if the enum value passed in has the flag passed in.
-    /// </summary>
-    /// <typeparam name="TEnum"></typeparam>
-    /// <param name="value"></param>
-    /// <param name="flag"></param>
-    /// <returns></returns>
-    public static bool HasFlag<TEnum>(TEnum value, TEnum flag) where TEnum : struct, Enum
-        => EnumRep<TEnum>.HasFlag(value, flag);
-
-    /// <summary>
-    /// Determines if the <typeparamref name="TEnum"/> value passed in has any of the specified flags.
-    /// </summary>
-    /// <typeparam name="TEnum"></typeparam>
-    /// <param name="value"></param>
-    /// <param name="flags"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentNullException"><paramref name="flags"/> was <see langword="null"/>.</exception>
-    public static bool HasAnyFlag<TEnum>(TEnum value, params TEnum[] flags) where TEnum : struct, Enum
-        => EnumRep<TEnum>.HasAnyFlag(value, flags is null ? throw new ArgumentNullException(nameof(flags)) : flags);
-
-    /// <summary>
-    /// Determines if the <typeparamref name="TEnum"/> value passed in has any of the specified flags.
-    /// </summary>
-    /// <typeparam name="TEnum"></typeparam>
-    /// <param name="value"></param>
-    /// <param name="flags"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentNullException"><paramref name="flags"/> was <see langword="null"/>.</exception>
-    public static bool HasAnyFlag<TEnum>(TEnum value, IEnumerable<TEnum> flags) where TEnum : struct, Enum
-        => EnumRep<TEnum>.HasAnyFlag(value, flags is null ? throw new ArgumentNullException(nameof(flags)) : flags);
-
-    /// <summary>
-    /// Returns a subset of the specified flags that are set in <paramref name="value"/>.
-    /// </summary>
-    /// <typeparam name="TEnum"></typeparam>
-    /// <param name="value"></param>
-    /// <param name="flags"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentNullException"><paramref name="flags"/> was <see langword="null"/>.</exception>
-    public static IEnumerable<TEnum> PresentFlags<TEnum>(TEnum value, params TEnum[] flags)
-        where TEnum : struct, Enum
-        => EnumRep<TEnum>.PresentFlags(value, flags is null ? throw new ArgumentNullException(nameof(flags)) : flags);
-
-    /// <summary>
-    /// Returns a subset of the specified flags that are set in <paramref name="value"/>.
-    /// </summary>
-    /// <typeparam name="TEnum"></typeparam>
-    /// <param name="value"></param>
-    /// <param name="flags"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentNullException"><paramref name="flags"/> was <see langword="null"/>.</exception>
-    public static IEnumerable<TEnum> PresentFlags<TEnum>(TEnum value, IEnumerable<TEnum> flags)
-        where TEnum : struct, Enum
-        => EnumRep<TEnum>.PresentFlags(value, flags is null ? throw new ArgumentNullException(nameof(flags)) : flags);
 
     /// <summary>
     /// Computes the bitwise OR (|) of the values passed in.
@@ -105,7 +50,9 @@ public static class Enums
     /// <returns></returns>
     public static TEnum XOr<TEnum>(TEnum lhs, TEnum rhs) where TEnum : struct, Enum
         => EnumRep<TEnum>.XOr(lhs, rhs);
+    #endregion
 
+    #region Comparisons
     /// <summary>
     /// Determines if the first value passed in is less than the second.
     /// </summary>
@@ -169,7 +116,9 @@ public static class Enums
     /// </returns>
     public static int CompareTo<TEnum>(TEnum lhs, TEnum rhs) where TEnum : struct, Enum
         => EnumRep<TEnum>.CompareTo(lhs, rhs);
+    #endregion
 
+    #region Enum Details
     /// <summary>
     /// Determines if the supplied <typeparamref name="TEnum"/> value is a named, defined value of its type, or a
     /// bit set of named, defined values of its type if <typeparamref name="TEnum"/> is decorated with an instance of
@@ -193,6 +142,64 @@ public static class Enums
     /// <returns></returns>
     public static EnumUnderlyingType UnderlyingType<TEnum>() where TEnum : struct, Enum
         => EnumRep<TEnum>.underlyingType;
+    #endregion
+
+    #region Flags
+    /// <summary>
+    /// Determines if the enum value passed in has the flag passed in.
+    /// </summary>
+    /// <typeparam name="TEnum"></typeparam>
+    /// <param name="value"></param>
+    /// <param name="flag"></param>
+    /// <returns></returns>
+    public static bool HasFlag<TEnum>(TEnum value, TEnum flag) where TEnum : struct, Enum
+        => EnumRep<TEnum>.HasFlag(value, flag);
+
+    /// <summary>
+    /// Determines if the <typeparamref name="TEnum"/> value passed in has any of the specified flags.
+    /// </summary>
+    /// <typeparam name="TEnum"></typeparam>
+    /// <param name="value"></param>
+    /// <param name="flags"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"><paramref name="flags"/> was <see langword="null"/>.</exception>
+    public static bool HasAnyFlag<TEnum>(TEnum value, params TEnum[] flags) where TEnum : struct, Enum
+        => EnumRep<TEnum>.HasAnyFlag(value, flags is null ? throw new ArgumentNullException(nameof(flags)) : flags);
+
+    /// <summary>
+    /// Determines if the <typeparamref name="TEnum"/> value passed in has any of the specified flags.
+    /// </summary>
+    /// <typeparam name="TEnum"></typeparam>
+    /// <param name="value"></param>
+    /// <param name="flags"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"><paramref name="flags"/> was <see langword="null"/>.</exception>
+    public static bool HasAnyFlag<TEnum>(TEnum value, IEnumerable<TEnum> flags) where TEnum : struct, Enum
+        => EnumRep<TEnum>.HasAnyFlag(value, flags is null ? throw new ArgumentNullException(nameof(flags)) : flags);
+
+    /// <summary>
+    /// Returns a subset of the specified flags that are set in <paramref name="value"/>.
+    /// </summary>
+    /// <typeparam name="TEnum"></typeparam>
+    /// <param name="value"></param>
+    /// <param name="flags"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"><paramref name="flags"/> was <see langword="null"/>.</exception>
+    public static IEnumerable<TEnum> PresentFlags<TEnum>(TEnum value, params TEnum[] flags)
+        where TEnum : struct, Enum
+        => EnumRep<TEnum>.PresentFlags(value, flags is null ? throw new ArgumentNullException(nameof(flags)) : flags);
+
+    /// <summary>
+    /// Returns a subset of the specified flags that are set in <paramref name="value"/>.
+    /// </summary>
+    /// <typeparam name="TEnum"></typeparam>
+    /// <param name="value"></param>
+    /// <param name="flags"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"><paramref name="flags"/> was <see langword="null"/>.</exception>
+    public static IEnumerable<TEnum> PresentFlags<TEnum>(TEnum value, IEnumerable<TEnum> flags)
+        where TEnum : struct, Enum
+        => EnumRep<TEnum>.PresentFlags(value, flags is null ? throw new ArgumentNullException(nameof(flags)) : flags);
 
     /// <summary>
     /// Determines whether the type definition of <typeparamref name="TEnum"/> is decorated with an instance of
@@ -234,4 +241,5 @@ public static class Enums
     /// </exception>
     public static IEnumerable<TEnum> GetFlags<TEnum>(TEnum value) where TEnum : struct, Enum
         => EnumRep<TEnum>.GetFlags(value);
+    #endregion
 }

@@ -13,6 +13,7 @@ namespace Rem.Core.Utilities;
 /// <typeparam name="TEnum"></typeparam>
 internal static class EnumRep<TEnum> where TEnum : struct, Enum
 {
+    #region Properties And Fields
     private static readonly EnumOperations<TEnum> operations;
 
     internal static readonly EnumUnderlyingType underlyingType;
@@ -24,7 +25,9 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     [MemberNotNullWhen(true, nameof(atomicValues))] internal static bool HasFlagsAttribute { get; }
 
     private static readonly HashSet<TEnum>? atomicValues;
+    #endregion
 
+    #region Constructor
     static EnumRep()
     {
         underlyingType = EnumUnderlyingTypes.FromType(typeof(TEnum).GetEnumUnderlyingType());
@@ -66,15 +69,11 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
             if (isAtomic) atomicValues.Add(values[i]);
         }
     }
+    #endregion
 
+    #region Methods
+    #region Bitwise Operations
     public static TEnum And(TEnum lhs, TEnum rhs) => operations.And(lhs, rhs);
-
-    public static bool HasFlag(TEnum value, TEnum flag) => operations.HasFlag(value, flag);
-
-    public static bool HasAnyFlag(TEnum value, IEnumerable<TEnum> flags) => operations.HasAnyFlag(value, flags);
-
-    public static IEnumerable<TEnum> PresentFlags(TEnum value, IEnumerable<TEnum> flags)
-        => operations.PresentFlags(value, flags);
 
     public static TEnum Or(TEnum lhs, TEnum rhs) => operations.Or(lhs, rhs);
 
@@ -83,7 +82,9 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     public static TEnum Not(TEnum value) => operations.Not(value);
 
     public static TEnum XOr(TEnum lhs, TEnum rhs) => operations.XOr(lhs, rhs);
+    #endregion
 
+    #region Comparisons
     public static bool Less(TEnum lhs, TEnum rhs) => operations.Less(lhs, rhs);
 
     public static bool Equal(TEnum lhs, TEnum rhs) => operations.Equal(lhs, rhs);
@@ -95,30 +96,9 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     public static bool GreaterOrEqual(TEnum lhs, TEnum rhs) => operations.GreaterOrEqual(lhs, rhs);
 
     public static int CompareTo(TEnum lhs, TEnum rhs) => operations.CompareTo(lhs, rhs);
+    #endregion
 
-    /// <summary>
-    /// Determines whether the specified <typeparamref name="TEnum"/> value is an atomic value (consisting of only
-    /// 1 bit flag).
-    /// </summary>
-    /// <remarks>
-    /// If <typeparamref name="TEnum"/> is not decorated with an instance of <see cref="FlagsAttribute"/>, this method
-    /// will return whether or not <paramref name="value"/> is defined (as in that case all values are treated
-    /// as atomic).
-    /// </remarks>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    public static bool IsAtomic(TEnum value) => HasFlagsAttribute ? atomicValues.Contains(value) : IsDefined(value);
-
-    /// <summary>
-    /// Gets an array of all atomic values (consisting of only 1 bit flag) of type <typeparamref name="TEnum"/>.
-    /// </summary>
-    /// <remarks>
-    /// If <typeparamref name="TEnum"/> is not decorated with an instance of <see cref="FlagsAttribute"/>, this method
-    /// will return all values of the type (as in that case all values are treated as atomic).
-    /// </remarks>
-    /// <returns></returns>
-    public static TEnum[] GetAtomicValues() => HasFlagsAttribute ? atomicValues.ToArray() : GetValues();
-
+    #region Enum Details
     /// <summary>
     /// Gets an array containing all values of type <typeparamref name="TEnum"/>.
     /// </summary>
@@ -134,12 +114,39 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     /// <returns></returns>
     public static bool IsDefined(TEnum value)
         => HasFlagsAttribute ? IsDefinedFlags(value) : IsDefinedNoFlags(value);
+    #endregion
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static bool IsDefinedNoFlags(TEnum value) => valuesSet.Contains(value);
+    #region Flags
+    /// <summary>
+    /// Determines whether the specified <typeparamref name="TEnum"/> value is an atomic value (consisting of only
+    /// 1 bit flag).
+    /// </summary>
+    /// <remarks>
+    /// If <typeparamref name="TEnum"/> is not decorated with an instance of <see cref="FlagsAttribute"/>, this method
+    /// will return whether or not <paramref name="value"/> is defined (as in that case all values are treated
+    /// as atomic).
+    /// </remarks>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static bool IsAtomic(TEnum value)
+        => HasFlagsAttribute ? atomicValues.Contains(value) : IsDefinedNoFlags(value);
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static bool IsDefinedFlags(TEnum value) => Equals(value, Or(GetFlags(value)));
+    /// <summary>
+    /// Gets an array of all atomic values (consisting of only 1 bit flag) of type <typeparamref name="TEnum"/>.
+    /// </summary>
+    /// <remarks>
+    /// If <typeparamref name="TEnum"/> is not decorated with an instance of <see cref="FlagsAttribute"/>, this method
+    /// will return all values of the type (as in that case all values are treated as atomic).
+    /// </remarks>
+    /// <returns></returns>
+    public static TEnum[] GetAtomicValues() => HasFlagsAttribute ? atomicValues.ToArray() : GetValues();
+
+    public static bool HasFlag(TEnum value, TEnum flag) => operations.HasFlag(value, flag);
+
+    public static bool HasAnyFlag(TEnum value, IEnumerable<TEnum> flags) => operations.HasAnyFlag(value, flags);
+
+    public static IEnumerable<TEnum> PresentFlags(TEnum value, IEnumerable<TEnum> flags)
+        => operations.PresentFlags(value, flags);
 
     /// <summary>
     /// Gets a collection of the flags contained in an instance of <typeparamref name="TEnum"/>.
@@ -162,5 +169,15 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
                 $"Cannot get flags from enum type '{typeof(TEnum)}' that is not decorated with an instance"
                     + $" of '{nameof(FlagsAttribute)}'.");
     }
+    #endregion
+
+    #region Helpers
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool IsDefinedNoFlags(TEnum value) => valuesSet.Contains(value);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool IsDefinedFlags(TEnum value) => Equals(value, Or(GetFlags(value)));
+    #endregion
+    #endregion
 }
 
