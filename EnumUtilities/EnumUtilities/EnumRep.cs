@@ -54,19 +54,23 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
         // Go through every enum value to see if it is included in another
         for (int i = 0; i < values.Length; i++)
         {
-            var isAtomic = true;
-            for (int j = 0; j < values.Length; j++)
+            // Never include the default in the list of atomic values, even if it is named
+            if (!Equals(values[i], default))
             {
-                if (j == i) continue; // Every enum value has itself as a flag
-
-                if (HasFlag(values[i], values[j]))
+                var isAtomic = true;
+                for (int j = 0; j < values.Length; j++)
                 {
-                    isAtomic = false;
-                    break;
-                }
-            }
+                    if (j == i) continue; // Every enum value has itself as a flag
 
-            if (isAtomic) atomicValues.Add(values[i]);
+                    if (HasFlag(values[i], values[j]))
+                    {
+                        isAtomic = false;
+                        break;
+                    }
+                }
+
+                if (isAtomic) atomicValues.Add(values[i]);
+            }
         }
     }
     #endregion
@@ -125,6 +129,10 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     /// If <typeparamref name="TEnum"/> is not decorated with an instance of <see cref="FlagsAttribute"/>, this method
     /// will return whether or not <paramref name="value"/> is defined (as in that case all values are treated
     /// as atomic).
+    /// <para />
+    /// It should be noted that if <typeparamref name="TEnum"/> <i>is</i> decorated with an instance of
+    /// <see cref="FlagsAttribute"/>, this method will return <see langword="false"/> when called on the default,
+    /// even if the default is explicitly named.
     /// </remarks>
     /// <param name="value"></param>
     /// <returns></returns>
@@ -137,6 +145,10 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     /// <remarks>
     /// If <typeparamref name="TEnum"/> is not decorated with an instance of <see cref="FlagsAttribute"/>, this method
     /// will return all values of the type (as in that case all values are treated as atomic).
+    /// <para />
+    /// It should be noted that if <typeparamref name="TEnum"/> <i>is</i> decorated with an instance of
+    /// <see cref="FlagsAttribute"/>, the default will not be included in the list of atomic values, even if it
+    /// is explicitly named.
     /// </remarks>
     /// <returns></returns>
     public static TEnum[] GetAtomicValues() => HasFlagsAttribute ? atomicValues.ToArray() : GetValues();
