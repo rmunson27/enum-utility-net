@@ -151,14 +151,15 @@ public static class Enums
     public static bool IsDefined<TEnum>(TEnum value) where TEnum : struct, Enum => EnumRep<TEnum>.IsDefined(value);
 
     /// <summary>
-    /// Gets all named, defined values of the enum type <typeparamref name="TEnum"/>.
+    /// Gets all named, defined values of type <typeparamref name="TEnum"/>.
     /// </summary>
     /// <typeparam name="TEnum"></typeparam>
     /// <returns></returns>
     public static TEnum[] GetValues<TEnum>() where TEnum : struct, Enum => EnumRep<TEnum>.GetValues();
 
     /// <summary>
-    /// Gets a value describing the underlying type of the <see langword="enum"/> type <typeparamref name="TEnum"/>.
+    /// Gets a value describing the underlying <see langword="enum"/> representation type
+    /// of <typeparamref name="TEnum"/>.
     /// </summary>
     /// <typeparam name="TEnum"></typeparam>
     /// <returns></returns>
@@ -168,7 +169,7 @@ public static class Enums
 
     #region Flags
     /// <summary>
-    /// Determines if the enum value passed in has the flag passed in.
+    /// Determines if the <typeparamref name="TEnum"/> value passed in has the flag passed in.
     /// </summary>
     /// <typeparam name="TEnum"></typeparam>
     /// <param name="value"></param>
