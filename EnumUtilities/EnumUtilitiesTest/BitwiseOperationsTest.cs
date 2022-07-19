@@ -12,9 +12,9 @@ public class BitwiseOperationsTest
     [TestMethod]
     public void TestAnd()
     {
-        foreach (var value1 in BitSet_Defaults.AllPossibleCombinations)
+        foreach (var value1 in BitSet_Defaults.AllPossibleCombinations.Keys)
         {
-            foreach (var value2 in BitSet_Defaults.AllPossibleCombinations)
+            foreach (var value2 in BitSet_Defaults.AllPossibleCombinations.Keys)
             {
                 Assert.AreEqual(value1 & value2, Enums.And(value1, value2));
             }
@@ -27,9 +27,9 @@ public class BitwiseOperationsTest
     [TestMethod]
     public void TestOr()
     {
-        foreach (var value1 in BitSet_Defaults.AllPossibleCombinations)
+        foreach (var value1 in BitSet_Defaults.AllPossibleCombinations.Keys)
         {
-            foreach (var value2 in BitSet_Defaults.AllPossibleCombinations)
+            foreach (var value2 in BitSet_Defaults.AllPossibleCombinations.Keys)
             {
                 Assert.AreEqual(value1 | value2, Enums.Or(value1, value2));
             }
@@ -45,9 +45,9 @@ public class BitwiseOperationsTest
     [TestMethod]
     public void TestOrRange()
     {
-        foreach (var value1 in BitSet_Defaults.AllPossibleCombinations)
+        foreach (var value1 in BitSet_Defaults.AllPossibleCombinations.Keys)
         {
-            foreach (var value2 in BitSet_Defaults.AllPossibleCombinations)
+            foreach (var value2 in BitSet_Defaults.AllPossibleCombinations.Keys)
             {
                 Assert.AreEqual(value1 | value2, Enums.Or(new[] { value1, value2 }));
             }
@@ -64,9 +64,9 @@ public class BitwiseOperationsTest
     [TestMethod]
     public void TestXOr()
     {
-        foreach (var value1 in BitSet_Defaults.AllPossibleCombinations)
+        foreach (var value1 in BitSet_Defaults.AllPossibleCombinations.Keys)
         {
-            foreach (var value2 in BitSet_Defaults.AllPossibleCombinations)
+            foreach (var value2 in BitSet_Defaults.AllPossibleCombinations.Keys)
             {
                 Assert.AreEqual(value1 ^ value2, Enums.XOr(value1, value2));
             }
@@ -79,7 +79,7 @@ public class BitwiseOperationsTest
     [TestMethod]
     public void TestNot()
     {
-        foreach (var value in BitSet_Defaults.AllPossibleCombinations)
+        foreach (var value in BitSet_Defaults.AllPossibleCombinations.Keys)
         {
             Assert.AreEqual(~value, Enums.Not(value));
         }

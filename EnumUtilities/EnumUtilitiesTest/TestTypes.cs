@@ -16,20 +16,30 @@ internal static class BitSet_Defaults
         BitSet_Default.Four,
     });
 
-    public static readonly ImmutableArray<BitSet_Default> AllPossibleCombinations = ImmutableArray.CreateRange(new[]
-    {
-        BitSet_Default.Zero,
+    /// <summary>
+    /// A mapping of the defined values of the <see cref="BitSet_Default"/> type to the atomic values they contain.
+    /// </summary>
+    public static readonly ImmutableDictionary<BitSet_Default, ImmutableHashSet<BitSet_Default>> AllPossibleCombinations
+        = ImmutableDictionary.CreateRange(new KeyValuePair<BitSet_Default, ImmutableHashSet<BitSet_Default>>[]
+        {
+            new(BitSet_Default.Zero, ImmutableHashSet<BitSet_Default>.Empty),
 
-        BitSet_Default.One,
-        BitSet_Default.Two,
-        BitSet_Default.Four,
+            new(BitSet_Default.One, ImmutableHashSet.Create(BitSet_Default.One)),
+            new(BitSet_Default.Two, ImmutableHashSet.Create(BitSet_Default.Two)),
+            new(BitSet_Default.Four, ImmutableHashSet.Create(BitSet_Default.Four)),
 
-        BitSet_Default.One | BitSet_Default.Two,
-        BitSet_Default.One | BitSet_Default.Four,
-        BitSet_Default.Two | BitSet_Default.Four,
+            new(
+                BitSet_Default.One | BitSet_Default.Two,
+                ImmutableHashSet.CreateRange(new[] { BitSet_Default.One, BitSet_Default.Two })),
+            new(
+                BitSet_Default.One | BitSet_Default.Four,
+                ImmutableHashSet.CreateRange(new[] { BitSet_Default.One, BitSet_Default.Four })),
+            new(
+                BitSet_Default.Two | BitSet_Default.Four,
+                ImmutableHashSet.CreateRange(new[] { BitSet_Default.Two, BitSet_Default.Four })),
 
-        BitSet_Default.One | BitSet_Default.Two | BitSet_Default.Four,
-    });
+            new(BitSet_Default.One | BitSet_Default.Two | BitSet_Default.Four, AllAtomicValues.ToImmutableHashSet()),
+        });
 
     public const BitSet_Default UnnamedAtomicFlag = (BitSet_Default)8;
     public const BitSet_Default UnnamedNonAtomic = UnnamedAtomicFlag | BitSet_Default.Two;
