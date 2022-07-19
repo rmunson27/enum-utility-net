@@ -161,8 +161,10 @@ internal sealed class ByteEnumOperations<TEnum> : EnumOperations<TEnum> where TE
 
     public override TEnum XOr(TEnum lhs, TEnum rhs) => Enum(Byte(lhs) ^ Byte(rhs));
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static byte Byte(TEnum value) => Unsafe.As<TEnum, byte>(ref value);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static TEnum Enum(int value) => Unsafe.As<int, TEnum>(ref value);
 }
 
@@ -201,8 +203,10 @@ internal sealed class SByteEnumOperations<TEnum> : EnumOperations<TEnum> where T
 
     public override TEnum XOr(TEnum lhs, TEnum rhs) => Enum(SByte(lhs) ^ SByte(rhs));
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static sbyte SByte(TEnum value) => Unsafe.As<TEnum, sbyte>(ref value);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static TEnum Enum(int value) => Unsafe.As<int, TEnum>(ref value);
 }
 
@@ -241,8 +245,10 @@ internal sealed class ShortEnumOperations<TEnum> : EnumOperations<TEnum> where T
 
     public override TEnum XOr(TEnum lhs, TEnum rhs) => Enum(Short(lhs) ^ Short(rhs));
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static short Short(TEnum value) => Unsafe.As<TEnum, short>(ref value);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static TEnum Enum(int value) => Unsafe.As<int, TEnum>(ref value);
 }
 
@@ -281,8 +287,10 @@ internal sealed class UShortEnumOperations<TEnum> : EnumOperations<TEnum> where 
 
     public override TEnum XOr(TEnum lhs, TEnum rhs) => Enum(UShort(lhs) ^ UShort(rhs));
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static ushort UShort(TEnum value) => Unsafe.As<TEnum, ushort>(ref value);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static TEnum Enum(int value) => Unsafe.As<int, TEnum>(ref value);
 }
 
@@ -321,8 +329,10 @@ internal sealed class IntEnumOperations<TEnum> : EnumOperations<TEnum> where TEn
 
     public override TEnum XOr(TEnum lhs, TEnum rhs) => Enum(Int(lhs) ^ Int(rhs));
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static int Int(TEnum value) => Unsafe.As<TEnum, int>(ref value);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static TEnum Enum(int value) => Unsafe.As<int, TEnum>(ref value);
 }
 
@@ -361,8 +371,10 @@ internal sealed class UIntEnumOperations<TEnum> : EnumOperations<TEnum> where TE
 
     public override TEnum XOr(TEnum lhs, TEnum rhs) => Enum(UInt(lhs) ^ UInt(rhs));
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static uint UInt(TEnum value) => Unsafe.As<TEnum, uint>(ref value);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static TEnum Enum(uint value) => Unsafe.As<uint, TEnum>(ref value);
 }
 
@@ -401,8 +413,10 @@ internal sealed class LongEnumOperations<TEnum> : EnumOperations<TEnum> where TE
 
     public override TEnum XOr(TEnum lhs, TEnum rhs) => Enum(Long(lhs) ^ Long(rhs));
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static long Long(TEnum value) => Unsafe.As<TEnum, long>(ref value);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static TEnum Enum(long value) => Unsafe.As<long, TEnum>(ref value);
 }
 
@@ -441,8 +455,10 @@ internal sealed class ULongEnumOperations<TEnum> : EnumOperations<TEnum> where T
 
     public override TEnum XOr(TEnum lhs, TEnum rhs) => Enum(ULong(lhs) ^ ULong(rhs));
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static ulong ULong(TEnum value) => Unsafe.As<TEnum, ulong>(ref value);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static TEnum Enum(ulong value) => Unsafe.As<ulong, TEnum>(ref value);
 }
 
