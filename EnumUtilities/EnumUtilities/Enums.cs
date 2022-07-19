@@ -226,10 +226,10 @@ public static class Enums
 
     /// <summary>
     /// Determines whether the type definition of <typeparamref name="TEnum"/> is decorated with an instance of
-    /// <see cref="FlagsAttribute"/>.
+    /// <see cref="FlagsAttribute"/>, and can therefore be treated as a bit set of values of its type.
     /// </summary>
     /// <returns></returns>
-    public static bool HasFlagsAttribute<TEnum>() where TEnum : struct, Enum => EnumRep<TEnum>.HasFlagsAttribute;
+    public static bool IsFlagSetType<TEnum>() where TEnum : struct, Enum => EnumRep<TEnum>.HasFlagsAttribute;
 
     /// <summary>
     /// Determines whether the specified <typeparamref name="TEnum"/> value is an atomic value (consisting of only
