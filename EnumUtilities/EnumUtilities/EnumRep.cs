@@ -55,22 +55,22 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
         for (int i = 0; i < values.Length; i++)
         {
             // Never include the default in the list of atomic values, even if it is named
-            if (!Equals(values[i], default))
+            if (Equal(values[i], default)) continue;
+
+            var isAtomic = true;
+            for (int j = 0; j < values.Length; j++)
             {
-                var isAtomic = true;
-                for (int j = 0; j < values.Length; j++)
+                if (j == i) continue; // Every enum value has itself as a flag
+                if (Equal(values[j], default)) continue; // Every enum value has the default as a flag
+
+                if (HasFlag(values[i], values[j]))
                 {
-                    if (j == i) continue; // Every enum value has itself as a flag
-
-                    if (HasFlag(values[i], values[j]))
-                    {
-                        isAtomic = false;
-                        break;
-                    }
+                    isAtomic = false;
+                    break;
                 }
-
-                if (isAtomic) atomicValues.Add(values[i]);
             }
+
+            if (isAtomic) atomicValues.Add(values[i]);
         }
     }
     #endregion
