@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Rem.Core.Utilities;
@@ -132,7 +133,13 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     /// <param name="value"></param>
     /// <returns></returns>
     public static bool IsDefined(TEnum value)
-        => HasFlagsAttribute ? Equals(value, Or(GetFlags(value))) : valuesSet.Contains(value);
+        => HasFlagsAttribute ? IsDefinedFlags(value) : IsDefinedNoFlags(value);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool IsDefinedNoFlags(TEnum value) => valuesSet.Contains(value);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool IsDefinedFlags(TEnum value) => Equals(value, Or(GetFlags(value)));
 
     /// <summary>
     /// Gets a collection of the flags contained in an instance of <typeparamref name="TEnum"/>.
