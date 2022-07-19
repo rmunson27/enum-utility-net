@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Rem.Core.Utilities;
@@ -32,6 +34,26 @@ public static class Enums
     /// <param name="rhs"></param>
     /// <returns></returns>
     public static TEnum Or<TEnum>(TEnum lhs, TEnum rhs) where TEnum : struct, Enum => EnumRep<TEnum>.Or(lhs, rhs);
+
+    /// <summary>
+    /// Computes the bitwise OR (|) of the values passed in.
+    /// </summary>
+    /// <typeparam name="TEnum"></typeparam>
+    /// <param name="values"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"><paramref name="values"/> was <see langword="null"/>.</exception>
+    public static TEnum Or<TEnum>(params TEnum[] values) where TEnum : struct, Enum
+        => EnumRep<TEnum>.Or(ThrowIfArgNull(values, nameof(values)));
+
+    /// <summary>
+    /// Computes the bitwise OR (|) of the values passed in.
+    /// </summary>
+    /// <typeparam name="TEnum"></typeparam>
+    /// <param name="values"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"><paramref name="values"/> was <see langword="null"/>.</exception>
+    public static TEnum Or<TEnum>(IEnumerable<TEnum> values) where TEnum : struct, Enum
+        => EnumRep<TEnum>.Or(ThrowIfArgNull(values, nameof(values)));
 
     /// <summary>
     /// Computes the bitwise NOT (!) of the value passed in.
@@ -187,7 +209,7 @@ public static class Enums
     /// <exception cref="ArgumentNullException"><paramref name="flags"/> was <see langword="null"/>.</exception>
     public static IEnumerable<TEnum> PresentFlags<TEnum>(TEnum value, params TEnum[] flags)
         where TEnum : struct, Enum
-        => EnumRep<TEnum>.PresentFlags(value, flags is null ? throw new ArgumentNullException(nameof(flags)) : flags);
+        => EnumRep<TEnum>.PresentFlags(value, ThrowIfArgNull(flags, nameof(flags)));
 
     /// <summary>
     /// Returns a subset of the specified flags that are set in <paramref name="value"/>.
@@ -199,7 +221,7 @@ public static class Enums
     /// <exception cref="ArgumentNullException"><paramref name="flags"/> was <see langword="null"/>.</exception>
     public static IEnumerable<TEnum> PresentFlags<TEnum>(TEnum value, IEnumerable<TEnum> flags)
         where TEnum : struct, Enum
-        => EnumRep<TEnum>.PresentFlags(value, flags is null ? throw new ArgumentNullException(nameof(flags)) : flags);
+        => EnumRep<TEnum>.PresentFlags(value, ThrowIfArgNull(flags, nameof(flags)));
 
     /// <summary>
     /// Determines whether the type definition of <typeparamref name="TEnum"/> is decorated with an instance of
@@ -241,5 +263,11 @@ public static class Enums
     /// </exception>
     public static IEnumerable<TEnum> GetFlags<TEnum>(TEnum value) where TEnum : struct, Enum
         => EnumRep<TEnum>.GetFlags(value);
+    #endregion
+
+    #region Helpers
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static T ThrowIfArgNull<T>([AllowNull] T arg, string argName)
+        => arg is null ? throw new ArgumentNullException(argName) : arg;
     #endregion
 }
