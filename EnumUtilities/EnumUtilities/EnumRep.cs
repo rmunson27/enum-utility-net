@@ -77,28 +77,39 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
 
     #region Methods
     #region Bitwise Operations
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TEnum And(TEnum lhs, TEnum rhs) => operations.And(lhs, rhs);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TEnum Or(TEnum lhs, TEnum rhs) => operations.Or(lhs, rhs);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TEnum Or(IEnumerable<TEnum> values) => operations.Or(values);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TEnum Not(TEnum value) => operations.Not(value);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TEnum XOr(TEnum lhs, TEnum rhs) => operations.XOr(lhs, rhs);
     #endregion
 
     #region Comparisons
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Less(TEnum lhs, TEnum rhs) => operations.Less(lhs, rhs);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Equal(TEnum lhs, TEnum rhs) => operations.Equal(lhs, rhs);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Greater(TEnum lhs, TEnum rhs) => operations.Greater(lhs, rhs);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool LessOrEqual(TEnum lhs, TEnum rhs) => operations.LessOrEqual(lhs, rhs);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool GreaterOrEqual(TEnum lhs, TEnum rhs) => operations.GreaterOrEqual(lhs, rhs);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int CompareTo(TEnum lhs, TEnum rhs) => operations.CompareTo(lhs, rhs);
     #endregion
 
@@ -107,6 +118,7 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     /// Gets an array containing all values of type <typeparamref name="TEnum"/>.
     /// </summary>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TEnum[] GetValues() => values.ToArray();
 
     /// <summary>
@@ -116,6 +128,7 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsDefined(TEnum value)
         => HasFlagsAttribute ? IsDefinedFlags(value) : IsDefinedNoFlags(value);
     #endregion
@@ -136,6 +149,7 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     /// </remarks>
     /// <param name="value"></param>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAtomic(TEnum value)
         => HasFlagsAttribute ? atomicValues.Contains(value) : IsDefinedNoFlags(value);
 
@@ -151,12 +165,16 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     /// is explicitly named.
     /// </remarks>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TEnum[] GetAtomicValues() => HasFlagsAttribute ? atomicValues.ToArray() : GetValues();
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool HasFlag(TEnum value, TEnum flag) => operations.HasFlag(value, flag);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool HasAnyFlag(TEnum value, IEnumerable<TEnum> flags) => operations.HasAnyFlag(value, flags);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static IEnumerable<TEnum> PresentFlags(TEnum value, IEnumerable<TEnum> flags)
         => operations.PresentFlags(value, flags);
 
