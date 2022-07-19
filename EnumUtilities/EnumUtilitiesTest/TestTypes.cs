@@ -31,7 +31,8 @@ internal static class BitSet_Defaults
         BitSet_Default.One | BitSet_Default.Two | BitSet_Default.Four,
     });
 
-    public const BitSet_Default Unnamed = (BitSet_Default)8;
+    public const BitSet_Default UnnamedAtomicFlag = (BitSet_Default)8;
+    public const BitSet_Default UnnamedNonAtomic = UnnamedAtomicFlag | BitSet_Default.Two;
 }
 
 [Flags]
