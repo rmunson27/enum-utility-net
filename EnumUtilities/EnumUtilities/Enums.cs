@@ -18,7 +18,7 @@ public static class Enums
 {
     #region Bitwise Operations
     /// <summary>
-    /// Computes the bitwise AND (&) of the values passed in.
+    /// Computes the bitwise AND (&amp;) of the values passed in.
     /// </summary>
     /// <typeparam name="TEnum"></typeparam>
     /// <param name="lhs"></param>
