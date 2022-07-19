@@ -72,8 +72,8 @@ public static class EnumUnderlyingTypes
     /// <param name="type"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"><paramref name="type"/> was <see langword="null"/>.</exception>
-    /// <exception cref="InvalidOperationException">
-    /// The type is not one of the underlying types representing an <see langword="enum"/>.
+    /// <exception cref="ArgumentException">
+    /// <paramref name="type"/> is not one of the underlying types representing an <see langword="enum"/>.
     /// </exception>
     [return: NamedEnum] public static EnumUnderlyingType FromType(Type type)
     {
@@ -81,7 +81,7 @@ public static class EnumUnderlyingTypes
 
         return UnderlyingTypeMap.TryGetValue(type, out var value)
                 ? value
-                : throw new InvalidOperationException($"Invalid enum underlying type '{type}'.");
+                : throw new ArgumentException($"Invalid enum underlying type '{type}'.");
     }
 }
 
