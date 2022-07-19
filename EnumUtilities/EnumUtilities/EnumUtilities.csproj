@@ -31,7 +31,7 @@
 	</PropertyGroup>
 
 	<ItemGroup Label="AllTargets">
-		<PackageReference Include="Rem.Core.Attributes" Version="1.1.0" />
+		<PackageReference Include="Rem.Core.Attributes" Version="1.2.0" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
