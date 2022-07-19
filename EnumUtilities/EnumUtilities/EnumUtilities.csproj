@@ -49,7 +49,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Rem.Core.Attributes" Version="1.0.0" />
+		<PackageReference Include="Rem.Core.Attributes" Version="1.1.0" />
 	</ItemGroup>
 
 </Project>
