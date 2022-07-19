@@ -169,18 +169,12 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     /// cannot reliably be treated as a bit set of atomic values of its type.
     /// </exception>
     public static IEnumerable<TEnum> GetFlags(TEnum value)
-    {
-        if (HasFlagsAttribute)
-        {
-            foreach (var flag in atomicValues)
-            {
-                if (operations.HasFlag(value, flag)) yield return flag;
-            }
-        }
-        else throw new InvalidOperationException(
+        => HasFlagsAttribute
+            ? GetFlagsUnsafe(value)
+            : throw new InvalidOperationException(
                 $"Cannot get flags from enum type '{typeof(TEnum)}' that is not decorated with an instance"
                     + $" of '{nameof(FlagsAttribute)}'.");
-    }
+
     #endregion
 
     #region Helpers
@@ -191,7 +185,21 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     private static bool IsDefinedFlags(TEnum value)
         => valuesSet.Contains(value)
             || (!Equal(value, default) // Don't allow the default to be compared for flags or it will always be defined
-                    && Equal(value, Or(GetFlags(value))));
+                    && Equal(value, Or(GetFlagsUnsafe(value))));
+
+    /// <summary>
+    /// Gets a collection of the flags contained in an instance of <typeparamref name="TEnum"/> without checking
+    /// whether or not its type is decorated with an instance of <see cref="FlagsAttribute"/>.
+    /// </summary>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static IEnumerable<TEnum> GetFlagsUnsafe(TEnum value)
+    {
+        foreach (var flag in atomicValues!)
+        {
+            if (operations.HasFlag(value, flag)) yield return flag;
+        }
+    }
     #endregion
     #endregion
 }
