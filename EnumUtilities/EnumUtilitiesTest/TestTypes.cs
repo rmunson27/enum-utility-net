@@ -16,7 +16,7 @@ internal static class BitSet_Defaults
         BitSet_Default.Four,
     });
 
-    public static readonly ImmutableArray<BitSet_Default> AllValues = ImmutableArray.CreateRange(new[]
+    public static readonly ImmutableArray<BitSet_Default> AllPossibleCombinations = ImmutableArray.CreateRange(new[]
     {
         BitSet_Default.Zero,
 
