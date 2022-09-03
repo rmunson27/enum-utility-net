@@ -36,7 +36,7 @@ public static class EnumUnderlyingTypes
     /// <exception cref="InvalidEnumArgumentException">
     /// The current instance was unnamed.
     /// </exception>
-    public static Type ToType([NamedEnum] this EnumUnderlyingType type) => type switch
+    public static Type ToType([NameableEnum] this EnumUnderlyingType type) => type switch
     {
         Byte => typeof(byte),
         SByte => typeof(sbyte),
@@ -59,7 +59,7 @@ public static class EnumUnderlyingTypes
     /// </param>
     /// <returns>Whether or not the operation succeeded.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="type"/> was <see langword="null"/>.</exception>
-    public static bool TryFromType(Type type, [NamedEnum] out EnumUnderlyingType value)
+    public static bool TryFromType(Type type, [NameableEnum] out EnumUnderlyingType value)
     {
         if (type is null) throw new ArgumentNullException(nameof(type));
 
@@ -75,7 +75,7 @@ public static class EnumUnderlyingTypes
     /// <exception cref="ArgumentException">
     /// <paramref name="type"/> is not one of the underlying types representing an <see langword="enum"/>.
     /// </exception>
-    [return: NamedEnum] public static EnumUnderlyingType FromType(Type type)
+    [return: NameableEnum] public static EnumUnderlyingType FromType(Type type)
     {
         if (type is null) throw new ArgumentNullException(nameof(type));
 
