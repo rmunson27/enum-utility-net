@@ -9,8 +9,8 @@ namespace Rem.Core.Utilities;
 /// Internally treats a value of type <typeparamref name="TEnum"/> as a value of the underlying type.
 /// </summary>
 /// <remarks>
-/// Subtypes of this type will use a specified underlying type to perform operations on <typeparamref name="TEnum"/>
-/// values.
+/// Subtypes of this type will use a specified underlying type to perform unsafe operations on
+/// <typeparamref name="TEnum"/> values to improve <see langword="enum"/> performance.
 /// </remarks>
 /// <typeparam name="TEnum"></typeparam>
 internal abstract class EnumOperations<TEnum> where TEnum : struct, Enum
@@ -647,4 +647,3 @@ internal sealed class ULongEnumOperations<TEnum> : EnumOperations<TEnum> where T
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static TEnum Enum(ulong value) => Unsafe.As<ulong, TEnum>(ref value);
 }
-

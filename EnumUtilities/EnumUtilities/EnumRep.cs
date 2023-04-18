@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Rem.Core.Attributes;
 
 namespace Rem.Core.Utilities;
 
@@ -22,9 +22,9 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
 
     private static readonly HashSet<TEnum> valuesSet = new(values);
 
-    [MemberNotNullWhen(true, nameof(atomicValues))] internal static bool HasFlagsAttribute { get; }
+    internal static readonly bool HasFlagsAttribute;
 
-    private static readonly HashSet<TEnum>? atomicValues;
+    private static readonly HashSet<TEnum> atomicValues;
     #endregion
 
     #region Constructor
@@ -118,6 +118,7 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     /// Gets an array containing all values of type <typeparamref name="TEnum"/>.
     /// </summary>
     /// <returns></returns>
+    [return: NameableEnum]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TEnum[] GetValues() => values.ToArray();
 
@@ -129,7 +130,7 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     /// <param name="value"></param>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool IsDefined(TEnum value)
+    public static bool IsDefined([NamedWhen(true)] TEnum value)
         => HasFlagsAttribute ? IsDefinedFlags(value) : IsDefinedNoFlags(value);
     #endregion
 

@@ -5,11 +5,9 @@
 		<PackageId>Rem.Core.Utilities.Enums</PackageId>
 		<RootNamespace>Rem.Core.Utilities</RootNamespace>
 		<Version>1.0.1</Version>
-		<Description>
-			Provides the Rem.Core.Utilities.Enums class, which offers functionality extending the functionality of
+		<Description>Provides the Rem.Core.Utilities.Enums class, which offers functionality extending the functionality of
 			the System.Enum class for .NET standard 2.0+, and the Rem.Core.Utilities.EnumUnderlyingType enum, which
-			can be used to represent the available underlying types for enums.
-		</Description>
+			can be used to represent the available underlying types for enums.</Description>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Authors>Richard E. Munson</Authors>
 		<Copyright>Richard E. Munson, 2022</Copyright>
