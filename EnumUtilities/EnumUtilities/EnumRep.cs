@@ -73,28 +73,25 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
 
         HasFlagsAttribute = typeof(TEnum).GetCustomAttributes(typeof(FlagsAttribute), inherit: false).Length > 0;
 
+        // Build atomic value set
         atomicValues = new();
-
-        // Go through every enum value to see if it is included in another
-        for (int i = 0; i < values.Length; i++)
+        foreach (var v in values)
         {
-            // Never include the default in the list of atomic values, even if it is named
-            if (Equal(values[i], default)) continue;
+            if (Equal(v, default)) continue; // The default is never considered an atomic value
 
-            var isAtomic = true;
-            for (int j = 0; j < values.Length; j++)
+            // Need to search for components that union together to create v
+            // Only relevant values to search are ones that are direct bit subsets (equal values are excused from being
+            // considered non-atomic just because another named value is equal)
+            // If the union of all such elements equals the value, it is not atomic
+            // Otherwise, it is.
+            var possibleComponents = values.Where(v2 => !Equal(v2, default) && !Equal(v, v2) && HasFlag(v, v2));
+            if (possibleComponents.Any())
             {
-                if (j == i) continue; // Every enum value has itself as a flag
-                if (Equal(values[j], default)) continue; // Every enum value has the default as a flag
-
-                if (HasFlag(values[i], values[j]))
-                {
-                    isAtomic = false;
-                    break;
-                }
+                var possibleComponentUnion = possibleComponents.Aggregate(Or);
+                var b = Equal(possibleComponentUnion, v);
+                if (!Equal(possibleComponentUnion, v)) atomicValues.Add(v);
             }
-
-            if (isAtomic) atomicValues.Add(values[i]);
+            else atomicValues.Add(v); // Must be atomic since it has no flags in the type
         }
 
         if (values.Length > 0)

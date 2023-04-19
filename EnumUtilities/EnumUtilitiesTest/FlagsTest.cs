@@ -21,10 +21,15 @@ public class FlagsTest
     public void TestGetAtomicValues()
     {
         // Values should just be the atomic values when dealing with a bit set
-        Assert.IsTrue(BitSet_Defaults.AllAtomicValues.ToHashSet().SetEquals(Enums.GetAtomicValues<BitSet_Default>()));
+        Assert.That.AreSetEqual(BitSet_Defaults.AllAtomicValues, Enums.GetAtomicValues<BitSet_Default>());
 
         // Otherwise values should be everything defined
-        Assert.IsTrue(NonBitSets.AllValues.ToHashSet().SetEquals(Enums.GetAtomicValues<NonBitSet>()));
+        Assert.That.AreSetEqual(NonBitSets.AllValues, Enums.GetAtomicValues<NonBitSet>());
+
+        // This is complex - there is a defined value that has a non-strict subflag that is a defined value and another
+        // non-strict subflag that is NOT a defined value
+        // The value in question should be treated as atomic
+        Assert.That.AreSetEqual(BitSet_Complexes.AllAtomicValues, Enums.GetAtomicValues<BitSet_Complex>());
     }
 
     /// <summary>
@@ -83,6 +88,11 @@ public class FlagsTest
                 Assert.IsTrue(Enums.HasAnyFlag(combo, notIncludedAtoms.Append(randomAtom)));
             }
         }
+
+        foreach (var v in BitSet_Defaults.AllAtomicValues)
+        {
+            Assert.IsTrue(Enums.HasFlag(v, default));
+        }
     }
 
     /// <summary>
@@ -106,6 +116,7 @@ public class FlagsTest
     {
         Assert.IsTrue(Enums.IsFlagSetType<BitSet_Default>());
         Assert.IsTrue(Enums.IsFlagSetType<BitSet_NoDefault>());
+        Assert.IsTrue(Enums.IsFlagSetType<BitSet_Complex>());
         Assert.IsFalse(Enums.IsFlagSetType<NonBitSet>());
     }
 
@@ -122,5 +133,42 @@ public class FlagsTest
 
         // Can't do this with a non-bit set
         Assert.ThrowsException<InvalidOperationException>(() => Enums.GetFlags(NonBitSet.Three));
+    }
+}
+
+file static class AssertExtensions
+{
+    public static void AreSetEqual<T>(this Assert _, IEnumerable<T> expected, IEnumerable<T> actual)
+    {
+        try
+        {
+            HashSet<T> expectedValues = new(expected), actualValues = new(actual);
+
+            Assert.AreEqual(expectedValues.Count, actualValues.Count,
+                            $"Numbers of unique values of expected sequence ({expectedValues.Count}) "
+                                + $"and actual sequence ({actualValues.Count}) differ.");
+
+            long i = 0;
+            foreach (var e in expected)
+            {
+                Assert.IsTrue(actualValues.Contains(e),
+                              $"Actual sequence does not contain expected value {e} at index {i}.");
+                i++;
+            }
+            i = 0;
+            foreach (var a in actual)
+            {
+                Assert.IsTrue(expectedValues.Contains(a),
+                              $"Expected sequence does not contain actual value {a} at index {i}.");
+                i++;
+            }
+        }
+        catch (AssertFailedException e)
+        {
+            static string WriteSequence(IEnumerable<T> sequence) => $"{{ {string.Join(", ", sequence)} }}";
+
+            throw new AssertFailedException(
+                $"Sequences {WriteSequence(expected)} and {WriteSequence(actual)} were not sequence-equal.", e);
+        }
     }
 }

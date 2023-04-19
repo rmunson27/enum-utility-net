@@ -254,7 +254,8 @@ public static class Enums
     public static bool IsAtomic<TEnum>(TEnum value) where TEnum : struct, Enum => EnumRep<TEnum>.IsAtomic(value);
 
     /// <summary>
-    /// Gets an array of all atomic values (consisting of only 1 bit flag) of type <typeparamref name="TEnum"/>.
+    /// Gets an array of all atomic values (which cannot be broken into smaller named flags) of type
+    /// <typeparamref name="TEnum"/>.
     /// </summary>
     /// <remarks>
     /// If <typeparamref name="TEnum"/> is not decorated with an instance of <see cref="FlagsAttribute"/>, this method

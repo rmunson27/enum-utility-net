@@ -64,6 +64,25 @@ internal enum BitSet_Default : byte
     Four = 4,
 }
 
+internal static class BitSet_Complexes
+{
+    public static readonly ImmutableArray<BitSet_Complex> AllAtomicValues = new[] { 1, 2, 6 }
+                                                                                .Select(n => (BitSet_Complex)n)
+                                                                                .ToImmutableArray();
+}
+
+[Flags]
+internal enum BitSet_Complex : byte
+{
+    Zero = 0,
+    One = 1,
+    Two = 2,
+
+    Three = One | Two, // Not atomic
+
+    Six = Two | 4, // 4 is not equal to a value of this type, so this should be treated as atomic
+}
+
 internal static class NonBitSets
 {
     public static readonly ImmutableArray<NonBitSet> AllValues = Enum.GetValues<NonBitSet>().ToImmutableArray();
