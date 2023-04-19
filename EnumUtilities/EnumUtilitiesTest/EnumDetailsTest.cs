@@ -18,14 +18,24 @@ public class EnumDetailsTest
     [TestMethod]
     public void TestUnderlyingType()
     {
+#pragma warning disable CS0618 // Still needs to be tested
         Assert.AreEqual(EnumUnderlyingType.Byte, Enums.UnderlyingType<ByteEnum>());
+        Assert.AreEqual(EnumUnderlyingType.Byte, Enums<ByteEnum>.UnderlyingType);
         Assert.AreEqual(EnumUnderlyingType.SByte, Enums.UnderlyingType<SByteEnum>());
+        Assert.AreEqual(EnumUnderlyingType.SByte, Enums<SByteEnum>.UnderlyingType);
         Assert.AreEqual(EnumUnderlyingType.Short, Enums.UnderlyingType<ShortEnum>());
+        Assert.AreEqual(EnumUnderlyingType.Short, Enums<ShortEnum>.UnderlyingType);
         Assert.AreEqual(EnumUnderlyingType.UShort, Enums.UnderlyingType<UShortEnum>());
+        Assert.AreEqual(EnumUnderlyingType.UShort, Enums<UShortEnum>.UnderlyingType);
         Assert.AreEqual(EnumUnderlyingType.Int, Enums.UnderlyingType<IntEnum>());
+        Assert.AreEqual(EnumUnderlyingType.Int, Enums<IntEnum>.UnderlyingType);
         Assert.AreEqual(EnumUnderlyingType.UInt, Enums.UnderlyingType<UIntEnum>());
+        Assert.AreEqual(EnumUnderlyingType.UInt, Enums<UIntEnum>.UnderlyingType);
         Assert.AreEqual(EnumUnderlyingType.Long, Enums.UnderlyingType<LongEnum>());
+        Assert.AreEqual(EnumUnderlyingType.Long, Enums<LongEnum>.UnderlyingType);
         Assert.AreEqual(EnumUnderlyingType.ULong, Enums.UnderlyingType<ULongEnum>());
+        Assert.AreEqual(EnumUnderlyingType.ULong, Enums<ULongEnum>.UnderlyingType);
+#pragma warning restore CS0618
     }
 
     /// <summary>
@@ -67,7 +77,9 @@ public class EnumDetailsTest
     {
         static void TestOfType<TEnum>() where TEnum : struct, Enum
         {
+#pragma warning disable CS0618 // Still needs to be tested
             Assert.That.SequenceEqual(Enum.GetValues<TEnum>(), Enums.GetValues<TEnum>());
+#pragma warning restore CS0618
             Assert.That.SequenceEqual(Enum.GetValues<TEnum>(), Enums<TEnum>.Values);
         }
 

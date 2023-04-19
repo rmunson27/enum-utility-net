@@ -21,15 +21,20 @@ public class FlagsTest
     public void TestGetAtomicValues()
     {
         // Values should just be the atomic values when dealing with a bit set
+#pragma warning disable CS0618 // Still need to be tested
         Assert.That.AreSetEqual(BitSet_Defaults.AllAtomicValues, Enums.GetAtomicValues<BitSet_Default>());
+        Assert.That.AreSetEqual(BitSet_Defaults.AllAtomicValues, Enums<BitSet_Default>.AtomicValues);
 
         // Otherwise values should be everything defined
         Assert.That.AreSetEqual(NonBitSets.AllValues, Enums.GetAtomicValues<NonBitSet>());
+        Assert.That.AreSetEqual(NonBitSets.AllValues, Enums<NonBitSet>.AtomicValues);
 
         // This is complex - there is a defined value that has a non-strict subflag that is a defined value and another
         // non-strict subflag that is NOT a defined value
         // The value in question should be treated as atomic
         Assert.That.AreSetEqual(BitSet_Complexes.AllAtomicValues, Enums.GetAtomicValues<BitSet_Complex>());
+        Assert.That.AreSetEqual(BitSet_Complexes.AllAtomicValues, Enums<BitSet_Complex>.AtomicValues);
+#pragma warning restore CS0618
     }
 
     /// <summary>

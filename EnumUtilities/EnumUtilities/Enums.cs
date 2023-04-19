@@ -164,6 +164,7 @@ public static class Enums
     /// </summary>
     /// <typeparam name="TEnum"></typeparam>
     /// <returns></returns>
+    [Obsolete("Will be removed in an upcoming version. Use `Enums<TEnum>.AtomicValues` instead.")]
     public static TEnum[] GetValues<TEnum>() where TEnum : struct, Enum => EnumRep<TEnum>.GetValues();
 
     /// <summary>
@@ -172,6 +173,7 @@ public static class Enums
     /// </summary>
     /// <typeparam name="TEnum"></typeparam>
     /// <returns></returns>
+    [Obsolete("Will be removed in an upcoming version. Use `Enums<TEnum>.UnderlyingType` instead.")]
     public static EnumUnderlyingType UnderlyingType<TEnum>() where TEnum : struct, Enum
         => EnumRep<TEnum>.underlyingType;
     #endregion
@@ -238,11 +240,12 @@ public static class Enums
     /// <see cref="FlagsAttribute"/>, and can therefore be treated as a bit set of values of its type.
     /// </summary>
     /// <returns></returns>
+    [Obsolete("Will be removed in an upcoming version. Use `Enums<TEnum>.IsFlagSet` instead.")]
     public static bool IsFlagSetType<TEnum>() where TEnum : struct, Enum => EnumRep<TEnum>.HasFlagsAttribute;
 
     /// <summary>
-    /// Determines whether the specified <typeparamref name="TEnum"/> value is an atomic value (consisting of only
-    /// 1 bit flag).
+    /// Determines whether the specified <typeparamref name="TEnum"/> value is an atomic value (i.e. a value that is
+    /// not equal to a union of other non-equal elements).
     /// </summary>
     /// <remarks>
     /// If <typeparamref name="TEnum"/> is not decorated with an instance of <see cref="FlagsAttribute"/>, this method
@@ -254,14 +257,15 @@ public static class Enums
     public static bool IsAtomic<TEnum>(TEnum value) where TEnum : struct, Enum => EnumRep<TEnum>.IsAtomic(value);
 
     /// <summary>
-    /// Gets an array of all atomic values (which cannot be broken into smaller named flags) of type
-    /// <typeparamref name="TEnum"/>.
+    /// Gets an array of all atomic values (values that are not equal to unions of other non-equal elements) of
+    /// type <typeparamref name="TEnum"/>.
     /// </summary>
     /// <remarks>
     /// If <typeparamref name="TEnum"/> is not decorated with an instance of <see cref="FlagsAttribute"/>, this method
     /// will return all values of the type (as in that case all values are treated as atomic).
     /// </remarks>
     /// <returns></returns>
+    [Obsolete("Will be removed in an upcoming version. Use `Enums<TEnum>.AtomicValues` instead.")]
     public static TEnum[] GetAtomicValues<TEnum>() where TEnum : struct, Enum => EnumRep<TEnum>.GetAtomicValues();
 
     /// <summary>
@@ -286,11 +290,37 @@ public static class Enums
 /// <summary>
 /// Constants and static functionality relating to the <typeparamref name="TEnum"/> <see langword="enum"/> type.
 /// </summary>
-/// <typeparam name="TEnum">The <see langword="enum"/> type this class has functionality for.</typeparam>
+/// <typeparam name="TEnum">The <see langword="enum"/> type this class contains functionality for.</typeparam>
 public static class Enums<TEnum> where TEnum : struct, Enum
 {
     /// <summary>
-    /// An <see cref="ImmutableArray{T}"/> containing all named, defined values of type <typeparamref name="TEnum"/>.
+    /// Gets a value describing the underlying <see langword="enum"/> representation type
+    /// of <typeparamref name="TEnum"/>.
+    /// </summary>
+    public static EnumUnderlyingType UnderlyingType => EnumRep<TEnum>.underlyingType;
+
+    /// <summary>
+    /// Gets whether or not <typeparamref name="TEnum"/> is decorated with an instance of <see cref="FlagsAttribute"/>,
+    /// and can therefore be treated as a bit set of values of its type.
+    /// </summary>
+    public static bool IsFlagSet => EnumRep<TEnum>.HasFlagsAttribute;
+
+    /// <summary>
+    /// Gets an <see cref="ImmutableArray{T}"/> containing all named, defined values of
+    /// type <typeparamref name="TEnum"/>.
     /// </summary>
     public static ImmutableArray<TEnum> Values => EnumRep<TEnum>.Values;
+
+    /// <summary>
+    /// Gets an <see cref="ImmutableArray{T}"/> containing all named, defined atomic values of type
+    /// <typeparamref name="TEnum"/> (i.e. values that are not equal to unions of other non-equal elements).
+    /// </summary>
+    /// <remarks>
+    /// If <typeparamref name="TEnum"/> is not decorated with an instance of <see cref="FlagsAttribute"/>, this array
+    /// will contain all values of the type (as in that case all values are treated as atomic).
+    /// <para/>
+    /// If <typeparamref name="TEnum"/> <i>is</i> decorated with an instance of <see cref="FlagsAttribute"/>, this
+    /// array will never contain <see langword="default"/>, as the default is never considered an atomic set of flags.
+    /// </remarks>
+    public static ImmutableArray<TEnum> AtomicValues => EnumRep<TEnum>.AtomicValues;
 }
