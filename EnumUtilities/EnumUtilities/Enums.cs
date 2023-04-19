@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -277,6 +278,7 @@ public static class Enums
     #region Helpers
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static T ThrowIfArgNull<T>([AllowNull] T arg, string argName)
+    private static T ThrowIfArgNull<T>([NotNull] T? arg, string argName)
         => arg is null ? throw new ArgumentNullException(argName) : arg;
     #endregion
 }

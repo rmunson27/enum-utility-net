@@ -3,8 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
-	<ImplicitUsings>enable</ImplicitUsings>
-	<RootNamespace>Rem.CoreTest.Utilities</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Rem.CoreTest.Utilities</RootNamespace>
+    <LangVersion>11.0</LangVersion>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
