@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Rem.Core.Attributes;
@@ -19,6 +20,11 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     internal static readonly EnumUnderlyingType underlyingType;
 
     private static readonly TEnum[] values = (TEnum[])Enum.GetValues(typeof(TEnum));
+
+    /// <summary>
+    /// An <see cref="ImmutableArray{T}"/> containing all named, defined values of type <typeparamref name="TEnum"/>.
+    /// </summary>
+    public static readonly ImmutableArray<TEnum> Values = values.ToImmutableArray();
 
     private static readonly HashSet<TEnum> valuesSet = new(values);
 

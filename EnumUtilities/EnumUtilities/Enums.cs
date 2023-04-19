@@ -282,3 +282,15 @@ public static class Enums
         => arg is null ? throw new ArgumentNullException(argName) : arg;
     #endregion
 }
+
+/// <summary>
+/// Constants and static functionality relating to the <typeparamref name="TEnum"/> <see langword="enum"/> type.
+/// </summary>
+/// <typeparam name="TEnum">The <see langword="enum"/> type this class has functionality for.</typeparam>
+public static class Enums<TEnum> where TEnum : struct, Enum
+{
+    /// <summary>
+    /// An <see cref="ImmutableArray{T}"/> containing all named, defined values of type <typeparamref name="TEnum"/>.
+    /// </summary>
+    public static ImmutableArray<TEnum> Values => EnumRep<TEnum>.Values;
+}

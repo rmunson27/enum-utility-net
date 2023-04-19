@@ -59,6 +59,32 @@ public class EnumDetailsTest
         Assert.IsFalse(Enums.IsDefined(default(BitSet_NoDefault)));
     }
 
+    /// <summary>
+    /// Tests the value-getting methods of the <see cref="Enums"/> and <see cref="Enums{TEnum}"/> classes.
+    /// </summary>
+    [TestMethod]
+    public void TestValues()
+    {
+        static void TestOfType<TEnum>() where TEnum : struct, Enum
+        {
+            Assert.That.SequenceEqual(Enum.GetValues<TEnum>(), Enums.GetValues<TEnum>());
+            Assert.That.SequenceEqual(Enum.GetValues<TEnum>(), Enums<TEnum>.Values);
+        }
+
+        TestOfType<ByteEnum>();
+        TestOfType<SByteEnum>();
+        TestOfType<ShortEnum>();
+        TestOfType<UShortEnum>();
+        TestOfType<IntEnum>();
+        TestOfType<UIntEnum>();
+        TestOfType<LongEnum>();
+        TestOfType<ULongEnum>();
+
+        TestOfType<BitSet_Default>();
+        TestOfType<BitSet_NoDefault>();
+        TestOfType<NonBitSet>();
+    }
+
     private enum ByteEnum : byte { }
     private enum SByteEnum : sbyte { }
     private enum ShortEnum : short { }
@@ -67,4 +93,41 @@ public class EnumDetailsTest
     private enum UIntEnum : uint { }
     private enum LongEnum : long { }
     private enum ULongEnum : ulong { }
+}
+
+file static class AssertExtensions
+{
+    /// <summary>
+    /// Asserts that the two sequences are equal.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="expected"></param>
+    /// <param name="actual"></param>
+    /// <exception cref="AssertFailedException">The assertion failed.</exception>
+    public static void SequenceEqual<T>(this Assert _, IEnumerable<T> expected, IEnumerable<T> actual)
+    {
+        using IEnumerator<T> expectedEnumerator = expected.GetEnumerator(),
+                             actualEnumerator = actual.GetEnumerator();
+
+        bool expectedHasNext = expectedEnumerator.MoveNext(),
+             actualHasNext = actualEnumerator.MoveNext();
+
+        long i = 0;
+        while (expectedHasNext && actualHasNext)
+        {
+            Assert.AreEqual(expectedEnumerator.Current, actualEnumerator.Current,
+                            $"Elements at index {i} were not equal.");
+            i++;
+            expectedHasNext = expectedEnumerator.MoveNext();
+            actualHasNext = actualEnumerator.MoveNext();
+        }
+
+        if (expectedHasNext != actualHasNext)
+        {
+            // Capitalize `shorter` because it will start sentence
+            var (shorter, longer) = expectedHasNext ? ("Actual", "expected") : ("Expected", "actual");
+
+            Assert.Fail($"{shorter} sequence ended after {i} elements, but {longer} sequence is longer.");
+        }
+    }
 }
