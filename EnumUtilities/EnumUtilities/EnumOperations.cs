@@ -151,7 +151,7 @@ internal abstract class EnumOperations<TEnum> where TEnum : struct, Enum
     /// This needs to be a <see cref="BigInteger"/> because <typeparamref name="TEnum"/> could be represented
     /// internally by a <see cref="long"/> or a <see cref="ulong"/>, neither of which contain the full value.
     /// </remarks>
-    /// <param name="lhs"></param>
+    /// <param name="value"></param>
     /// <returns></returns>
     public abstract BigInteger GetNumericValue(TEnum value);
 
