@@ -74,28 +74,36 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
 
         HasFlagsAttribute = typeof(TEnum).GetCustomAttributes(typeof(FlagsAttribute), inherit: false).Length > 0;
 
-        // Build atomic value set
-        var atomicValuesBuilder = ImmutableArray.CreateBuilder<TEnum>();
-        foreach (var v in values)
+        if (HasFlagsAttribute)
         {
-            if (Equal(v, default)) continue; // The default is never considered an atomic value
-
-            // Need to search for components that union together to create v
-            // Only relevant values to search are ones that are direct bit subsets (equal values are excused from being
-            // considered non-atomic just because another named value is equal)
-            // If the union of all such elements equals the value, it is not atomic
-            // Otherwise, it is.
-            var possibleComponents = values.Where(v2 => !Equal(v2, default) && !Equal(v, v2) && HasFlag(v, v2));
-            if (possibleComponents.Any())
+            // Build atomic value set
+            var atomicValuesBuilder = ImmutableArray.CreateBuilder<TEnum>();
+            foreach (var v in values)
             {
-                var possibleComponentUnion = possibleComponents.Aggregate(Or);
-                var b = Equal(possibleComponentUnion, v);
-                if (!Equal(possibleComponentUnion, v)) atomicValuesBuilder.Add(v);
+                if (Equal(v, default)) continue; // The default is never considered an atomic value
+
+                // Need to search for components that union together to create v
+                // Only relevant values to search are ones that are direct bit subsets (equal values are excused from being
+                // considered non-atomic just because another named value is equal)
+                // If the union of all such elements equals the value, it is not atomic
+                // Otherwise, it is.
+                var possibleComponents = values.Where(v2 => !Equal(v2, default) && !Equal(v, v2) && HasFlag(v, v2));
+                if (possibleComponents.Any())
+                {
+                    var possibleComponentUnion = possibleComponents.Aggregate(Or);
+                    var b = Equal(possibleComponentUnion, v);
+                    if (!Equal(possibleComponentUnion, v)) atomicValuesBuilder.Add(v);
+                }
+                else atomicValuesBuilder.Add(v); // Must be atomic since it has no flags in the type
             }
-            else atomicValuesBuilder.Add(v); // Must be atomic since it has no flags in the type
+            AtomicValues = atomicValuesBuilder.ToImmutable();
+            atomicValues = new(atomicValuesBuilder);
         }
-        AtomicValues = atomicValuesBuilder.ToImmutable();
-        atomicValues = new(atomicValuesBuilder);
+        else // Everything is atomic
+        {
+            AtomicValues = Values;
+            atomicValues = new(values);
+        }
 
         if (values.Length > 0)
         {
@@ -216,7 +224,7 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     /// </remarks>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static TEnum[] GetAtomicValues() => HasFlagsAttribute ? AtomicValues.ToArray() : GetValues();
+    public static TEnum[] GetAtomicValues() => AtomicValues.ToArray();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool HasFlag(TEnum value, TEnum flag) => operations.HasFlag(value, flag);
@@ -231,6 +239,10 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     /// <summary>
     /// Gets a collection of the flags contained in an instance of <typeparamref name="TEnum"/>.
     /// </summary>
+    /// <remarks>
+    /// The collection returned will never contain <see langword="default"/>, although all values of
+    /// <see langword="enum"/> types trivially contain <see langword="default"/> as a flag.
+    /// </remarks>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException">
     /// <typeparamref name="TEnum"/> is not decorated with an instance of <see cref="FlagsAttribute"/>, and therefore
