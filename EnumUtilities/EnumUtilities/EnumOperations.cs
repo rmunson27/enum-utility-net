@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -142,6 +143,24 @@ internal abstract class EnumOperations<TEnum> where TEnum : struct, Enum
     /// <param name="rhs"></param>
     /// <returns></returns>
     public abstract int CompareTo(TEnum lhs, TEnum rhs);
+
+    /// <summary>
+    /// Gets the numeric value of the <typeparamref name="TEnum"/> passed in.
+    /// </summary>
+    /// <remarks>
+    /// This needs to be a <see cref="BigInteger"/> because <typeparamref name="TEnum"/> could be represented
+    /// internally by a <see cref="long"/> or a <see cref="ulong"/>, neither of which contain the full value.
+    /// </remarks>
+    /// <param name="lhs"></param>
+    /// <returns></returns>
+    public abstract BigInteger GetNumericValue(TEnum value);
+
+    /// <summary>
+    /// Gets a <typeparamref name="TEnum"/> from the numeric value passed in.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public abstract TEnum FromNumericValue(BigInteger value);
 }
 
 internal sealed class ByteEnumOperations<TEnum> : EnumOperations<TEnum> where TEnum : struct, Enum
@@ -199,6 +218,10 @@ internal sealed class ByteEnumOperations<TEnum> : EnumOperations<TEnum> where TE
     }
 
     public override TEnum XOr(TEnum lhs, TEnum rhs) => Enum(Byte(lhs) ^ Byte(rhs));
+
+    public override BigInteger GetNumericValue(TEnum value) => Byte(value);
+
+    public override TEnum FromNumericValue(BigInteger value) => Enum((byte)value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static byte Byte(TEnum value) => Unsafe.As<TEnum, byte>(ref value);
@@ -263,6 +286,10 @@ internal sealed class SByteEnumOperations<TEnum> : EnumOperations<TEnum> where T
 
     public override TEnum XOr(TEnum lhs, TEnum rhs) => Enum(SByte(lhs) ^ SByte(rhs));
 
+    public override BigInteger GetNumericValue(TEnum value) => SByte(value);
+
+    public override TEnum FromNumericValue(BigInteger value) => Enum((sbyte)value);
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static sbyte SByte(TEnum value) => Unsafe.As<TEnum, sbyte>(ref value);
 
@@ -325,6 +352,10 @@ internal sealed class ShortEnumOperations<TEnum> : EnumOperations<TEnum> where T
     }
 
     public override TEnum XOr(TEnum lhs, TEnum rhs) => Enum(Short(lhs) ^ Short(rhs));
+
+    public override BigInteger GetNumericValue(TEnum value) => Short(value);
+
+    public override TEnum FromNumericValue(BigInteger value) => Enum((short)value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static short Short(TEnum value) => Unsafe.As<TEnum, short>(ref value);
@@ -389,6 +420,10 @@ internal sealed class UShortEnumOperations<TEnum> : EnumOperations<TEnum> where 
 
     public override TEnum XOr(TEnum lhs, TEnum rhs) => Enum(UShort(lhs) ^ UShort(rhs));
 
+    public override BigInteger GetNumericValue(TEnum value) => UShort(value);
+
+    public override TEnum FromNumericValue(BigInteger value) => Enum((ushort)value);
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static ushort UShort(TEnum value) => Unsafe.As<TEnum, ushort>(ref value);
 
@@ -451,6 +486,10 @@ internal sealed class IntEnumOperations<TEnum> : EnumOperations<TEnum> where TEn
     }
 
     public override TEnum XOr(TEnum lhs, TEnum rhs) => Enum(Int(lhs) ^ Int(rhs));
+
+    public override BigInteger GetNumericValue(TEnum value) => Int(value);
+
+    public override TEnum FromNumericValue(BigInteger value) => Enum((int)value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static int Int(TEnum value) => Unsafe.As<TEnum, int>(ref value);
@@ -515,6 +554,10 @@ internal sealed class UIntEnumOperations<TEnum> : EnumOperations<TEnum> where TE
 
     public override TEnum XOr(TEnum lhs, TEnum rhs) => Enum(UInt(lhs) ^ UInt(rhs));
 
+    public override BigInteger GetNumericValue(TEnum value) => UInt(value);
+
+    public override TEnum FromNumericValue(BigInteger value) => Enum((uint)value);
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static uint UInt(TEnum value) => Unsafe.As<TEnum, uint>(ref value);
 
@@ -578,6 +621,10 @@ internal sealed class LongEnumOperations<TEnum> : EnumOperations<TEnum> where TE
 
     public override TEnum XOr(TEnum lhs, TEnum rhs) => Enum(Long(lhs) ^ Long(rhs));
 
+    public override BigInteger GetNumericValue(TEnum value) => Long(value);
+
+    public override TEnum FromNumericValue(BigInteger value) => Enum((long)value);
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static long Long(TEnum value) => Unsafe.As<TEnum, long>(ref value);
 
@@ -640,6 +687,10 @@ internal sealed class ULongEnumOperations<TEnum> : EnumOperations<TEnum> where T
     }
 
     public override TEnum XOr(TEnum lhs, TEnum rhs) => Enum(ULong(lhs) ^ ULong(rhs));
+
+    public override BigInteger GetNumericValue(TEnum value) => ULong(value);
+
+    public override TEnum FromNumericValue(BigInteger value) => Enum((ulong)value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static ulong ULong(TEnum value) => Unsafe.As<TEnum, ulong>(ref value);

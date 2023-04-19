@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Rem.Core.Attributes;
@@ -31,6 +32,24 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     internal static readonly bool HasFlagsAttribute;
 
     private static readonly HashSet<TEnum> atomicValues;
+
+    /// <summary>
+    /// Stores whether or not the named <typeparamref name="TEnum"/> values form a continuous range if there are named
+    /// values, otherwise is <see langword="false"/>.
+    /// </summary>
+    private static readonly bool IsContinuousRange = false;
+
+    /// <summary>
+    /// Stores the inclusive lower bound of the continuous range of values if <see cref="IsContinuousRange"/>
+    /// is <see langword="true"/>, otherwise is the default.
+    /// </summary>
+    private static readonly TEnum ContinuousRangeStart = default;
+
+    /// <summary>
+    /// Stores the inclusive upper bound of the continuous range of values if <see cref="IsContinuousRange"/>
+    /// is <see langword="true"/>, otherwise is the default.
+    /// </summary>
+    private static readonly TEnum ContinuousRangeEnd = default;
     #endregion
 
     #region Constructor
@@ -54,7 +73,6 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
 
         HasFlagsAttribute = typeof(TEnum).GetCustomAttributes(typeof(FlagsAttribute), inherit: false).Length > 0;
 
-        // Build the atomic values set
         atomicValues = new();
 
         // Go through every enum value to see if it is included in another
@@ -77,6 +95,31 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
             }
 
             if (isAtomic) atomicValues.Add(values[i]);
+        }
+
+        if (values.Length > 0)
+        {
+            // Determine if is continuous range
+            SortedSet<BigInteger> sortedNumericValues = new(values.Select(operations.GetNumericValue));
+            var firstValue = sortedNumericValues.First();
+            var currentValue = firstValue;
+            bool hasRange = true;
+            foreach (var value in sortedNumericValues)
+            {
+                if (value == currentValue + 1) currentValue = value; // Increment the current value
+                else if (value > currentValue) // Is a gap between `currentValue` and `value`
+                {
+                    hasRange = false;
+                    break;
+                }
+            }
+            if (hasRange)
+            {
+                var lastValue = currentValue;
+                IsContinuousRange = true;
+                ContinuousRangeStart = operations.FromNumericValue(firstValue);
+                ContinuousRangeEnd = operations.FromNumericValue(lastValue);
+            }
         }
     }
     #endregion
@@ -204,7 +247,10 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
 
     #region Helpers
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static bool IsDefinedNoFlags(TEnum value) => valuesSet.Contains(value);
+    private static bool IsDefinedNoFlags(TEnum value)
+        => IsContinuousRange
+            ? GreaterOrEqual(value, ContinuousRangeStart) && LessOrEqual(value, ContinuousRangeEnd)
+            : valuesSet.Contains(value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool IsDefinedFlags(TEnum value)
