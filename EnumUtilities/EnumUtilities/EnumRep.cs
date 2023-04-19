@@ -31,6 +31,7 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
 
     internal static readonly bool HasFlagsAttribute;
 
+    public static readonly ImmutableArray<TEnum> AtomicValues;
     private static readonly HashSet<TEnum> atomicValues;
 
     /// <summary>
@@ -74,7 +75,7 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
         HasFlagsAttribute = typeof(TEnum).GetCustomAttributes(typeof(FlagsAttribute), inherit: false).Length > 0;
 
         // Build atomic value set
-        atomicValues = new();
+        var atomicValuesBuilder = ImmutableArray.CreateBuilder<TEnum>();
         foreach (var v in values)
         {
             if (Equal(v, default)) continue; // The default is never considered an atomic value
@@ -89,10 +90,12 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
             {
                 var possibleComponentUnion = possibleComponents.Aggregate(Or);
                 var b = Equal(possibleComponentUnion, v);
-                if (!Equal(possibleComponentUnion, v)) atomicValues.Add(v);
+                if (!Equal(possibleComponentUnion, v)) atomicValuesBuilder.Add(v);
             }
-            else atomicValues.Add(v); // Must be atomic since it has no flags in the type
+            else atomicValuesBuilder.Add(v); // Must be atomic since it has no flags in the type
         }
+        AtomicValues = atomicValuesBuilder.ToImmutable();
+        atomicValues = new(atomicValuesBuilder);
 
         if (values.Length > 0)
         {
@@ -213,7 +216,7 @@ internal static class EnumRep<TEnum> where TEnum : struct, Enum
     /// </remarks>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static TEnum[] GetAtomicValues() => HasFlagsAttribute ? atomicValues.ToArray() : GetValues();
+    public static TEnum[] GetAtomicValues() => HasFlagsAttribute ? AtomicValues.ToArray() : GetValues();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool HasFlag(TEnum value, TEnum flag) => operations.HasFlag(value, flag);

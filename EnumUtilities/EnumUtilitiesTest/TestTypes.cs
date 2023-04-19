@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,12 +67,13 @@ internal enum BitSet_Default : byte
 
 internal static class BitSet_Complexes
 {
-    public static readonly ImmutableArray<BitSet_Complex> AllAtomicValues = new[] { 1, 2, 6 }
+    public static readonly ImmutableArray<BitSet_Complex> AllAtomicValues = new[] { 1, 2, 6, 2 }
                                                                                 .Select(n => (BitSet_Complex)n)
                                                                                 .ToImmutableArray();
 }
 
 [Flags]
+[SuppressMessage("Design", "CA1069:Enums values should not be duplicated", Justification = "For testing.")]
 internal enum BitSet_Complex : byte
 {
     Zero = 0,
@@ -81,6 +83,8 @@ internal enum BitSet_Complex : byte
     Three = One | Two, // Not atomic
 
     Six = Two | 4, // 4 is not equal to a value of this type, so this should be treated as atomic
+
+    TwoAgain = 2, // This should be treated as atomic even though it's equal to 2
 }
 
 internal static class NonBitSets
